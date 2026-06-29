@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>麻雀点棒管理</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a3a5c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="点棒管理">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0f1923;
+  --surface:#1a2a3a;
+  --card:#1e3248;
+  --border:#2e4a68;
+  --primary:#3498db;
+  --success:#2ecc71;
+  --danger:#e74c3c;
+  --warn:#f1c40f;
+  --silver:#95a5a6;
+  --bronze:#c0773a;
+  --text:#ecf0f1;
+  --muted:#6e8a9e;
+  --tile:#fdf6e3;
+}
+html,body{
+  height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Hiragino Sans',Meiryo,sans-serif;
+  font-size:16px;
+  overflow-x:hidden;
+}
+#app{
+  min-height:100vh;
+  max-width:500px;
+  margin:0 auto;
+}
+
+/* ── Header ── */
+.hdr{
+  background:var(--surface);
+  padding:12px 16px;
+  padding-top:calc(12px + env(safe-area-inset-top));
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+.hdr-title{font-size:17px;font-weight:700;letter-spacing:.3px}
+.hdr-btn{
+  background:none;
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:6px 14px;
+  border-radius:8px;
+  font-size:13px;
+  cursor:pointer;
+  min-width:52px;
+  text-align:center;
+}
+.hdr-btn:active{opacity:.6}
+
+/* ── Layout ── */
+.body{padding:12px 14px;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+.sec{margin-bottom:16px}
+.sec-label{
+  font-size:11px;
+  font-weight:700;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  margin-bottom:8px;
+}
+
+/* ── Cards ── */
+.card{
+  background:var(--card);
+  border-radius:14px;
+  padding:16px;
+  border:1px solid var(--border);
+}
+
+/* ── Toggle group ── */
+.tgl{
+  display:flex;
+  background:#0a1520;
+  border-radius:10px;
+  padding:4px;
+  gap:4px;
+}
+.tgl-btn{
+  flex:1;
+  padding:9px 8px;
+  border:none;
+  background:none;
+  color:var(--muted);
+  border-radius:7px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .18s;
+}
+.tgl-btn.on{background:var(--primary);color:#fff}
+.tgl-btn:active{opacity:.7}
+
+/* ── Inputs ── */
+.inp{
+  background:#0a1520;
+  border:1px solid var(--border);
+  border-radius:9px;
+  color:var(--text);
+  padding:11px 14px;
+  font-size:16px;
+  width:100%;
+  outline:none;
+  appearance:none;
+}
+.inp:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(52,152,219,.2)}
+.lbl{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:500}
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+
+/* ── Buttons ── */
+.btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border:none;
+  border-radius:11px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  padding:14px 18px;
+  width:100%;
+  transition:opacity .15s,transform .1s;
+  letter-spacing:.2px;
+}
+.btn:active{opacity:.75;transform:scale(.98)}
+.btn:disabled{opacity:.35;pointer-events:none}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+.btn-warn{background:var(--warn);color:#000}
+.btn-sm{font-size:13px;padding:9px 14px;border-radius:8px;width:auto}
+
+/* ── Player name grid ── */
+.name-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ── Round bar ── */
+.round-bar{
+  background:var(--card);
+  border-radius:13px;
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:10px 8px;
+  gap:4px;
+}
+.round-cell{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+}
+.round-cell-lbl{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.round-cell-row{display:flex;align-items:center;gap:5px}
+.round-cell-val{font-size:18px;font-weight:800;min-width:40px;text-align:center}
+.round-sep{width:1px;height:36px;background:var(--border);flex-shrink:0}
+.adj-btn{
+  background:var(--border);
+  border:none;
+  color:var(--text);
+  width:28px;
+  height:28px;
+  border-radius:7px;
+  font-size:17px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  flex-shrink:0;
+}
+.adj-btn:active{opacity:.6}
+
+/* ── Player card ── */
+.pcard{
+  background:var(--card);
+  border-radius:15px;
+  padding:14px;
+  border:2px solid var(--border);
+  margin-bottom:10px;
+  transition:border-color .2s;
+}
+.pcard:last-child{margin-bottom:0}
+.pcard.r1{border-color:var(--warn)}
+.pcard.r2{border-color:var(--silver)}
+.pcard.r3{border-color:var(--bronze)}
+.pcard-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.pcard-name{font-size:16px;font-weight:700}
+.pcard-seat{font-size:11px;color:var(--muted);margin-left:5px}
+.rank-badge{
+  font-size:11px;
+  font-weight:800;
+  padding:3px 9px;
+  border-radius:12px;
+  letter-spacing:.3px;
+}
+.rb1{background:var(--warn);color:#000}
+.rb2{background:var(--silver);color:#000}
+.rb3{background:var(--bronze);color:#fff}
+.rb4{background:var(--border);color:var(--muted)}
+.pcard-score{
+  font-size:38px;
+  font-weight:900;
+  letter-spacing:-1.5px;
+  line-height:1;
+  margin:6px 0 4px;
+}
+.pcard-meta{font-size:12px;color:var(--muted);margin-bottom:10px}
+.score-pos{color:var(--success)}
+.score-neg{color:var(--danger)}
+.score-zero{color:var(--muted)}
+
+/* Score action buttons row */
+.sbtns{display:flex;gap:5px}
+.sbtn{
+  flex:1;
+  padding:9px 2px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  border:none;
+  text-align:center;
+}
+.sbtn:active{opacity:.65}
+.sbtn-m2{background:#2d1010;border:1px solid #6a1515;color:#ff7070}
+.sbtn-m1{background:#231010;border:1px solid #5a1010;color:#ff9090}
+.sbtn-edit{background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+.sbtn-p1{background:#0d2310;border:1px solid #1a6a20;color:#70dd70}
+.sbtn-p2{background:#112910;border:1px solid #1f7a28;color:#50ee70}
+
+/* ── Bottom nav ── */
+.bnav{
+  display:flex;
+  gap:8px;
+  padding:10px 14px;
+  padding-bottom:calc(10px + env(safe-area-inset-bottom));
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  position:sticky;
+  bottom:0;
+  z-index:20;
+}
+.bnav .btn{flex:1;padding:14px 8px;font-size:14px}
+
+/* ── Score diff hint ── */
+.diff-hint{
+  text-align:right;
+  font-size:11px;
+  margin-top:5px;
+  font-weight:600;
+}
+
+/* ── Modal / bottom sheet ── */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:100;
+  display:flex;
+  align-items:flex-end;
+  animation:fadeIn .15s;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.sheet{
+  background:var(--surface);
+  border-radius:22px 22px 0 0;
+  padding:20px 16px;
+  padding-bottom:calc(20px + env(safe-area-inset-bottom));
+  width:100%;
+  max-height:88vh;
+  overflow-y:auto;
+  border-top:1px solid var(--border);
+  animation:slideUp .2s;
+}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sheet-name{font-size:14px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.sheet-score{font-size:32px;font-weight:900;color:var(--primary);margin-bottom:18px;letter-spacing:-1px}
+.qbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.qbtn{
+  padding:11px 2px;
+  border:none;
+  border-radius:9px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  text-align:center;
+}
+.qbtn:active{opacity:.65}
+.qbtn-p{background:#0d2d10;border:1px solid #1d6a22;color:#70ee70}
+.qbtn-m{background:#2d1010;border:1px solid #7a2020;color:#ff7070}
+.custom-row{display:flex;gap:8px;margin-top:14px;margin-bottom:14px}
+
+/* ── Result screen ── */
+.result-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:var(--card);
+  border-radius:14px;
+  padding:14px 16px;
+  margin-bottom:8px;
+  border:1px solid var(--border);
+}
+.result-rank{font-size:28px;width:40px;text-align:center;flex-shrink:0}
+.result-body{flex:1;min-width:0}
+.result-name{font-size:17px;font-weight:700}
+.result-breakdown{font-size:11px;color:var(--muted);margin-top:2px}
+.result-pts{font-size:26px;font-weight:900;flex-shrink:0}
+
+/* ── Cumulative bar ── */
+.cumul{
+  background:var(--card);
+  border-radius:13px;
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.cumul-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:11px 16px;
+  border-bottom:1px solid var(--border);
+}
+.cumul-row:last-child{border-bottom:none}
+.cumul-name{font-size:14px;font-weight:600}
+.cumul-total{font-size:16px;font-weight:800}
+
+/* ── History ── */
+.hist-item{
+  background:var(--card);
+  border-radius:12px;
+  border:1px solid var(--border);
+  padding:12px 14px;
+  margin-bottom:8px;
+}
+.hist-meta{font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:500}
+.hist-players{display:flex;gap:6px;flex-wrap:wrap}
+.hist-p{
+  flex:1;
+  min-width:70px;
+  background:#0a1520;
+  border-radius:8px;
+  padding:7px 8px;
+  text-align:center;
+}
+.hist-p-rank{font-size:10px;color:var(--muted);font-weight:600}
+.hist-p-name{font-size:12px;font-weight:700;margin:1px 0}
+.hist-p-pts{font-size:14px;font-weight:800}
+
+/* ── Misc ── */
+.mt8{margin-top:8px}
+.mt12{margin-top:12px}
+.mt16{margin-top:16px}
+.gap8{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;gap:8px}
+.row>.btn{flex:1}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+.badge{
+  display:inline-block;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:2px 8px;
+  font-size:11px;
+  font-weight:600;
+  color:var(--muted);
+}
+.danger-zone{
+  background:#200a0a;
+  border:1px solid #5a1515;
+  border-radius:12px;
+  padding:12px 14px;
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+'use strict';
+
+/* ──────────────────────────────────────────────────────
+   Constants
+────────────────────────────────────────────────────── */
+const WINDS = ['東','南','西','北'];
+const SEAT_LABELS = ['東家','南家','西家','北家'];
+const RANK_ICONS = ['🥇','🥈','🥉','4️⃣'];
+const STORAGE_KEY = 'mahjong_app_v3';
+
+/* ──────────────────────────────────────────────────────
+   State
+────────────────────────────────────────────────────── */
+function defaultState() {
+  return {
+    screen: 'setup',
+    prevScreen: 'setup',
+    playerCount: 4,
+    players: [
+      {name:'東家',score:25000,total:0},
+      {name:'南家',score:25000,total:0},
+      {name:'西家',score:25000,total:0},
+      {name:'北家',score:25000,total:0},
+    ],
+    rules: {
+      gameType: 'hanchan',
+      startPoints: 25000,
+      returnPoints: 30000,
+      uma4raw: '20,10,-10,-20',
+      uma3raw: '15,0,-15',
+      uma4: [20,10,-10,-20],
+      uma3: [15,0,-15],
+      okaEnabled: true,
+      oka: 20,
+    },
+    game: {windIdx:0, roundNum:1, honba:0, riichiSticks:0},
+    gameHistory: [],
+    undoStack: [],
+    modal: null,
+    gameCount: 0,
+  };
+}
+
+let S = (() => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      // Merge with defaults to handle schema upgrades
+      const def = defaultState();
+      return {
+        ...def,
+        ...saved,
+        rules: {...def.rules, ...saved.rules},
+        game: {...def.game, ...saved.game},
+        modal: null,
+      };
+    }
+  } catch(e) {}
+  return defaultState();
+})();
+
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({...S, modal:null, undoStack:S.undoStack.slice(-10)}));
+  } catch(e) {}
+}
+
+/* ──────────────────────────────────────────────────────
+   Undo
+────────────────────────────────────────────────────── */
+function pushUndo() {
+  S.undoStack.push({
+    players: S.players.map(p => ({...p})),
+    game: {...S.game},
+  });
+  if (S.undoStack.length > 20) S.undoStack.shift();
+}
+
+function undo() {
+  if (!S.undoStack.length) return;
+  const snap = S.undoStack.pop();
+  S.players = snap.players;
+  S.game = snap.game;
+  save();
+  render();
+}
+
+/* ──────────────────────────────────────────────────────
+   Utilities
+────────────────────────────────────────────────────── */
+function fmt(n) { return n.toLocaleString('ja-JP'); }
+function fmtPt(n) { return (n > 0 ? '+' : '') + n; }
+
+function getRanks() {
+  // Returns array[playerCount] of rank (1-based), seat order as tiebreaker
+  return S.players.slice(0, S.playerCount).map((p, i) => {
+    const better = S.players.slice(0, S.playerCount).filter((q, j) =>
+      q.score > p.score || (q.score === p.score && j < i)
+    ).length;
+    return better + 1;
+  });
+}
+
+function getRoundLabel() {
+  const {windIdx, roundNum} = S.game;
+  const maxWinds = S.rules.gameType === 'hanchan' ? 2 : 1;
+  const isLast = windIdx === maxWinds - 1 && roundNum === S.playerCount;
+  return `${WINDS[windIdx]}${roundNum}局${isLast ? '（オーラス）' : ''}`;
+}
+
+function getUma() {
+  return S.playerCount === 4 ? S.rules.uma4 : S.rules.uma3;
+}
+
+function parseUma(raw) {
+  return (raw || '').split(',').map(v => parseInt(v.trim(), 10)).filter(v => !isNaN(v));
+}
+
+function deltaColor(n) {
+  if (n > 0) return 'score-pos';
+  if (n < 0) return 'score-neg';
+  return 'score-zero';
+}
+
+/* ──────────────────────────────────────────────────────
+   Score mutations
+────────────────────────────────────────────────────── */
+function applyDelta(idx, delta) {
+  if (!delta || isNaN(delta)) return;
+  pushUndo();
+  S.players[idx].score += delta;
+  save();
+  render();
+}
+
+function advanceRound(dir) {
+  pushUndo();
+  const maxWinds = S.rules.gameType === 'hanchan' ? 2 : 1;
+  const pc = S.playerCount;
+  if (dir > 0) {
+    if (S.game.roundNum < pc) {
+      S.game.roundNum++;
+    } else if (S.game.windIdx < maxWinds - 1) {
+      S.game.windIdx++;
+      S.game.roundNum = 1;
+    }
+  } else {
+    if (S.game.roundNum > 1) {
+      S.game.roundNum--;
+    } else if (S.game.windIdx > 0) {
+      S.game.windIdx--;
+      S.game.roundNum = pc;
+    }
+  }
+  save();
+  render();
+}
+
+/* ──────────────────────────────────────────────────────
+   Game lifecycle
+────────────────────────────────────────────────────── */
+function startGame() {
+  // Read current form values
+  document.querySelectorAll('[data-field]').forEach(el => {
+    const key = el.dataset.field;
+    if (key === 'name') {
+      const i = parseInt(el.dataset.i);
+      S.players[i].name = el.value.trim() || SEAT_LABELS[i];
+    } else if (key === 'startPoints' || key === 'returnPoints' || key === 'oka') {
+      const v = parseInt(el.value, 10);
+      if (!isNaN(v)) S.rules[key] = v;
+    } else if (key === 'uma4raw') {
+      S.rules.uma4raw = el.value;
+      S.rules.uma4 = parseUma(el.value);
+    } else if (key === 'uma3raw') {
+      S.rules.uma3raw = el.value;
+      S.rules.uma3 = parseUma(el.value);
+    }
+  });
+  // Ensure uma arrays are valid
+  if (!S.rules.uma4 || S.rules.uma4.length !== 4) S.rules.uma4 = [20,10,-10,-20];
+  if (!S.rules.uma3 || S.rules.uma3.length !== 3) S.rules.uma3 = [15,0,-15];
+
+  S.players.slice(0, S.playerCount).forEach(p => { p.score = S.rules.startPoints; });
+  S.game = {windIdx:0, roundNum:1, honba:0, riichiSticks:0};
+  S.undoStack = [];
+  S.modal = null;
+  S.screen = 'game';
+  save();
+  render();
+}
+
+function calcResults() {
+  const uma = getUma();
+  const ret = S.rules.returnPoints;
+  const ranks = getRanks();
+  return S.players.slice(0, S.playerCount).map((p, i) => {
+    const rank = ranks[i];
+    const umaVal = uma[rank - 1] ?? 0;
+    const rawPts = Math.round((p.score - ret) / 1000);
+    const okaVal = S.rules.okaEnabled && rank === 1 ? S.rules.oka : 0;
+    return {idx:i, name:p.name, score:p.score, rank, uma:umaVal, oka:okaVal, rawPts, total: rawPts + umaVal + okaVal};
+  });
+}
+
+function endGame() {
+  const results = calcResults();
+  results.forEach(r => { S.players[r.idx].total += r.total; });
+  S.gameHistory.push({
+    date: new Date().toLocaleString('ja-JP', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}),
+    gameType: S.rules.gameType,
+    gameNum: S.gameCount + 1,
+    results: results.map(r => ({...r})),
+  });
+  S.gameCount++;
+  S.screen = 'result';
+  S.undoStack = [];
+  save();
+  render();
+}
+
+function nextGame() {
+  S.players.slice(0, S.playerCount).forEach(p => { p.score = S.rules.startPoints; });
+  S.game = {windIdx:0, roundNum:1, honba:0, riichiSticks:0};
+  S.undoStack = [];
+  S.modal = null;
+  S.screen = 'game';
+  save();
+  render();
+}
+
+function resetAll() {
+  if (!confirm('全データをリセットしますか？\n対局履歴と累計収支がすべて消去されます。')) return;
+  const newS = defaultState();
+  newS.playerCount = S.playerCount;
+  newS.players = S.players.map((p, i) => ({name:p.name, score:S.rules.startPoints, total:0}));
+  newS.rules = {...S.rules};
+  S = newS;
+  save();
+  render();
+}
+
+/* ──────────────────────────────────────────────────────
+   CSV Export
+────────────────────────────────────────────────────── */
+function exportCSV() {
+  if (!S.gameHistory.length) return;
+  const rows = [['対局番号','日時','種別','プレイヤー','最終点数','順位','素点','ウマ','オカ','収支','累計収支']];
+  const running = {};
+  S.players.slice(0, S.playerCount).forEach(p => { running[p.name] = 0; });
+
+  S.gameHistory.forEach(g => {
+    g.results.forEach(r => {
+      running[r.name] = (running[r.name] || 0) + r.total;
+      rows.push([g.gameNum, g.date, g.gameType==='hanchan'?'半荘':'東風',
+        r.name, r.score, r.rank, r.rawPts, r.uma, r.oka, r.total, running[r.name]]);
+    });
+  });
+
+  const csv = '﻿' + rows.map(r => r.join(',')).join('\r\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `mahjong_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ──────────────────────────────────────────────────────
+   Render: Setup
+────────────────────────────────────────────────────── */
+function renderSetup() {
+  const {playerCount:pc, rules:r, players} = S;
+  const nameFields = [0,1,2,3].map(i => `
+    <div ${i===3&&pc===3?'style="display:none"':''} data-name-slot="${i}">
+      <div class="field">
+        <label class="lbl">${SEAT_LABELS[i]}</label>
+        <input class="inp" type="text" data-field="name" data-i="${i}"
+          value="${esc(players[i]?.name || SEAT_LABELS[i])}" placeholder="${SEAT_LABELS[i]}" maxlength="10">
+      </div>
+    </div>
+  `).join('');
+
+  const hasHistory = S.gameHistory.length > 0;
+
+  return `
+<div class="hdr">
+  <div style="width:52px"></div>
+  <div class="hdr-title">🀄 麻雀点棒管理</div>
+  <button class="hdr-btn" data-act="toHistory" ${!hasHistory?'style="opacity:.3;pointer-events:none"':''}>履歴</button>
+</div>
+<div class="body">
+
+<div class="sec">
+  <div class="sec-label">人数</div>
+  <div class="tgl">
+    <button class="tgl-btn ${pc===3?'on':''}" data-act="setPC" data-v="3">三人打ち</button>
+    <button class="tgl-btn ${pc===4?'on':''}" data-act="setPC" data-v="4">四人打ち</button>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-label">プレイヤー名</div>
+  <div class="card">
+    <div class="name-grid">${nameFields}</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-label">ゲーム設定</div>
+  <div class="card">
+    <div class="field">
+      <label class="lbl">戦型</label>
+      <div class="tgl">
+        <button class="tgl-btn ${r.gameType==='tonpuu'?'on':''}" data-act="setGameType" data-v="tonpuu">東風戦</button>
+        <button class="tgl-btn ${r.gameType==='hanchan'?'on':''}" data-act="setGameType" data-v="hanchan">半荘戦</button>
+      </div>
+    </div>
+    <div class="field">
+      <label class="lbl">開始点数</label>
+      <input class="inp" type="number" data-field="startPoints" value="${r.startPoints}" step="1000" min="0">
+    </div>
+    <div class="field">
+      <label class="lbl">返し点（精算基準点）</label>
+      <input class="inp" type="number" data-field="returnPoints" value="${r.returnPoints}" step="1000" min="0">
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-label">ウマ設定</div>
+  <div class="card">
+    <div class="field" ${pc===3?'style="display:none"':''} data-uma-slot="4">
+      <label class="lbl">四人打ちウマ（1〜4位、カンマ区切り）</label>
+      <input class="inp" type="text" data-field="uma4raw" value="${esc(r.uma4raw)}" placeholder="20,10,-10,-20">
+    </div>
+    <div class="field" ${pc===4?'style="display:none"':''} data-uma-slot="3">
+      <label class="lbl">三人打ちウマ（1〜3位、カンマ区切り）</label>
+      <input class="inp" type="text" data-field="uma3raw" value="${esc(r.uma3raw)}" placeholder="15,0,-15">
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-label">オカ設定</div>
+  <div class="card">
+    <div class="field">
+      <label class="lbl">オカ</label>
+      <div class="tgl">
+        <button class="tgl-btn ${r.okaEnabled?'on':''}" data-act="setOka" data-v="1">あり</button>
+        <button class="tgl-btn ${!r.okaEnabled?'on':''}" data-act="setOka" data-v="0">なし</button>
+      </div>
+    </div>
+    <div ${!r.okaEnabled?'style="display:none"':''} data-oka-amount>
+      <div class="field">
+        <label class="lbl">1位加算点数（1000点単位）</label>
+        <input class="inp" type="number" data-field="oka" value="${r.oka}" min="0">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <button class="btn btn-success" style="font-size:18px;padding:16px" data-act="startGame">
+    対局開始
+  </button>
+  ${hasHistory ? `
+  <div class="mt8">
+    <button class="btn btn-secondary" data-act="resumeGame">
+      対局を再開する
+    </button>
+  </div>
+  ` : ''}
+</div>
+
+</div>`;
+}
+
+/* ──────────────────────────────────────────────────────
+   Render: Game
+────────────────────────────────────────────────────── */
+function renderGame() {
+  const ranks = getRanks();
+  const pc = S.playerCount;
+  const g = S.game;
+  const startPts = S.rules.startPoints;
+
+  const rankClass = r => ['','r1','r2','r3','r4'][r];
+  const rbClass = r => ['','rb1','rb2','rb3','rb4'][r];
+  const rankLabel = r => ['','1位','2位','3位','4位'][r];
+
+  const pcards = S.players.slice(0, pc).map((p, i) => {
+    const rank = ranks[i];
+    const delta = p.score - startPts;
+    return `
+<div class="pcard ${rankClass(rank)}">
+  <div class="pcard-top">
+    <div>
+      <span class="pcard-name">${esc(p.name)}</span>
+      <span class="pcard-seat">${SEAT_LABELS[i]}</span>
+    </div>
+    <span class="rank-badge ${rbClass(rank)}">${rankLabel(rank)}</span>
+  </div>
+  <div class="pcard-score">${fmt(p.score)}</div>
+  <div class="pcard-meta">
+    <span class="${deltaColor(delta)}">${delta>=0?'+':''}${fmt(delta)}</span>
+    <span style="margin:0 6px;opacity:.4">·</span>
+    累計: <span class="${deltaColor(p.total)}">${fmtPt(p.total)}</span>
+  </div>
+  <div class="sbtns">
+    <button class="sbtn sbtn-m2" data-act="qs" data-i="${i}" data-d="-5000">−5k</button>
+    <button class="sbtn sbtn-m1" data-act="qs" data-i="${i}" data-d="-1000">−1k</button>
+    <button class="sbtn sbtn-edit" data-act="openEdit" data-i="${i}">✏️</button>
+    <button class="sbtn sbtn-p1" data-act="qs" data-i="${i}" data-d="1000">＋1k</button>
+    <button class="sbtn sbtn-p2" data-act="qs" data-i="${i}" data-d="5000">＋5k</button>
+  </div>
+</div>`;
+  }).join('');
+
+  const total = S.players.slice(0, pc).reduce((s, p) => s + p.score, 0);
+  const expected = startPts * pc;
+  const diff = total - expected;
+  const diffStyle = diff === 0 ? 'color:var(--success)' : 'color:var(--danger)';
+
+  return `
+<div class="hdr">
+  <button class="hdr-btn" data-act="toSetup">設定</button>
+  <div class="hdr-title">第${S.gameCount+1}半荘</div>
+  <button class="hdr-btn" data-act="toHistory">履歴</button>
+</div>
+<div class="body" style="padding-bottom:80px">
+
+<div class="sec">
+  <div class="round-bar">
+    <div class="round-cell">
+      <div class="round-cell-lbl">局</div>
+      <div class="round-cell-row">
+        <button class="adj-btn" data-act="adjRound" data-v="-1">◀</button>
+        <div class="round-cell-val" style="font-size:14px;min-width:80px">${getRoundLabel()}</div>
+        <button class="adj-btn" data-act="adjRound" data-v="1">▶</button>
+      </div>
+    </div>
+    <div class="round-sep"></div>
+    <div class="round-cell">
+      <div class="round-cell-lbl">本場</div>
+      <div class="round-cell-row">
+        <button class="adj-btn" data-act="adjHonba" data-v="-1">−</button>
+        <div class="round-cell-val">${g.honba}</div>
+        <button class="adj-btn" data-act="adjHonba" data-v="1">＋</button>
+      </div>
+    </div>
+    <div class="round-sep"></div>
+    <div class="round-cell">
+      <div class="round-cell-lbl">供託</div>
+      <div class="round-cell-row">
+        <button class="adj-btn" data-act="adjRiichi" data-v="-1">−</button>
+        <div class="round-cell-val">${g.riichiSticks}</div>
+        <button class="adj-btn" data-act="adjRiichi" data-v="1">＋</button>
+      </div>
+    </div>
+  </div>
+  <div class="diff-hint" style="${diffStyle}">
+    ${diff === 0 ? '✓ 合計 ' + fmt(total) : '⚠ 差分 ' + fmtPt(diff) + '（合計 ' + fmt(total) + '）'}
+  </div>
+</div>
+
+<div class="sec">${pcards}</div>
+
+</div>
+
+<div class="bnav">
+  <button class="btn btn-secondary" data-act="undo" ${!S.undoStack.length?'disabled':''}>↩ Undo</button>
+  <button class="btn btn-secondary" data-act="nextRound">次の局 →</button>
+  <button class="btn btn-danger" data-act="endGame">精算</button>
+</div>
+
+${renderModal()}`;
+}
+
+/* ──────────────────────────────────────────────────────
+   Render: Modal
+────────────────────────────────────────────────────── */
+function renderModal() {
+  if (!S.modal) return '';
+  const p = S.players[S.modal.playerIdx];
+
+  const posVals = [100,500,1000,2000,3000,5000,8000,12000,16000,24000,32000,48000];
+  const negVals = posVals.map(v => -v);
+
+  const pBtns = posVals.map(v =>
+    `<button class="qbtn qbtn-p" data-act="qm" data-v="${v}">${v>=1000?'+'+(v/1000)+'k':'+'+v}</button>`
+  ).join('');
+  const mBtns = negVals.map(v =>
+    `<button class="qbtn qbtn-m" data-act="qm" data-v="${v}">${v<=-1000?(v/1000)+'k':v}</button>`
+  ).join('');
+
+  return `
+<div class="overlay" data-act="closeModal">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-name">${esc(p.name)}</div>
+    <div class="sheet-score">${fmt(p.score)}</div>
+
+    <div class="sec-label">加算（プラス）</div>
+    <div class="qbtns" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">${pBtns}</div>
+
+    <div class="sec-label">減算（マイナス）</div>
+    <div class="qbtns" style="grid-template-columns:repeat(4,1fr);margin-bottom:4px">${mBtns}</div>
+
+    <div class="custom-row">
+      <input class="inp" type="number" id="modalInp" placeholder="直接入力（例: 3900 / -2000）" style="flex:1">
+      <button class="btn btn-primary btn-sm" data-act="applyModal" style="flex-shrink:0;width:auto;padding:11px 18px">確定</button>
+    </div>
+    <button class="btn btn-secondary" style="margin-top:6px" data-act="closeModal">キャンセル</button>
+  </div>
+</div>`;
+}
+
+/* ──────────────────────────────────────────────────────
+   Render: Result
+────────────────────────────────────────────────────── */
+function renderResult() {
+  const game = S.gameHistory[S.gameHistory.length - 1];
+  if (!game) { S.screen = 'setup'; return renderSetup(); }
+
+  const sorted = [...game.results].sort((a,b) => a.rank - b.rank);
+
+  const cards = sorted.map(r => {
+    const ptsClass = r.total >= 0 ? 'score-pos' : 'score-neg';
+    const breakdown = `${fmt(r.score)}点 ／ 素点${fmtPt(r.rawPts)} ウマ${fmtPt(r.uma)}${r.oka?` オカ＋${r.oka}`:''}`;
+    return `
+<div class="result-card">
+  <div class="result-rank">${RANK_ICONS[r.rank-1]}</div>
+  <div class="result-body">
+    <div class="result-name">${esc(r.name)}</div>
+    <div class="result-breakdown">${breakdown}</div>
+  </div>
+  <div class="result-pts ${ptsClass}">${fmtPt(r.total)}</div>
+</div>`;
+  }).join('');
+
+  const cumulRows = S.players.slice(0, S.playerCount)
+    .map(p => `
+<div class="cumul-row">
+  <span class="cumul-name">${esc(p.name)}</span>
+  <span class="cumul-total ${deltaColor(p.total)}">${fmtPt(p.total)}</span>
+</div>`).join('');
+
+  return `
+<div class="hdr">
+  <div style="width:52px"></div>
+  <div class="hdr-title">対局結果</div>
+  <button class="hdr-btn" data-act="toHistory">履歴</button>
+</div>
+<div class="body">
+
+<div class="sec">
+  <div class="sec-label">第${game.gameNum}半荘 · ${game.gameType==='hanchan'?'半荘':'東風'}戦 · ${game.date}</div>
+  ${cards}
+</div>
+
+<div class="sec">
+  <div class="sec-label">累計収支</div>
+  <div class="cumul">${cumulRows}</div>
+</div>
+
+<div class="sec gap8">
+  <button class="btn btn-success" style="font-size:18px;padding:16px" data-act="nextGame">次の半荘へ →</button>
+  <button class="btn btn-secondary" data-act="toHistory">対局履歴を見る</button>
+  <button class="btn btn-secondary" data-act="toSetup">ルール設定を変更</button>
+</div>
+
+</div>`;
+}
+
+/* ──────────────────────────────────────────────────────
+   Render: History
+────────────────────────────────────────────────────── */
+function renderHistory() {
+  const hasHistory = S.gameHistory.length > 0;
+
+  const cumulRows = S.players.slice(0, S.playerCount)
+    .map(p => `
+<div class="cumul-row">
+  <span class="cumul-name">${esc(p.name)}</span>
+  <span class="cumul-total ${deltaColor(p.total)}">${fmtPt(p.total)}</span>
+</div>`).join('');
+
+  const histItems = [...S.gameHistory].reverse().map(g => {
+    const sorted = [...g.results].sort((a,b) => a.rank - b.rank);
+    const cells = sorted.map(r => `
+<div class="hist-p">
+  <div class="hist-p-rank">${r.rank}位</div>
+  <div class="hist-p-name">${esc(r.name)}</div>
+  <div class="hist-p-pts ${deltaColor(r.total)}">${fmtPt(r.total)}</div>
+</div>`).join('');
+    return `
+<div class="hist-item">
+  <div class="hist-meta">第${g.gameNum}半荘 · ${g.gameType==='hanchan'?'半荘':'東風'}戦 · ${g.date}</div>
+  <div class="hist-players">${cells}</div>
+</div>`;
+  }).join('');
+
+  return `
+<div class="hdr">
+  <button class="hdr-btn" data-act="backHistory">← 戻る</button>
+  <div class="hdr-title">対局履歴</div>
+  ${hasHistory ? `<button class="hdr-btn" data-act="exportCSV">CSV</button>` : '<div style="width:52px"></div>'}
+</div>
+<div class="body">
+
+<div class="sec">
+  <div class="sec-label">累計収支（${S.gameCount}半荘）</div>
+  <div class="cumul">${cumulRows}</div>
+</div>
+
+${hasHistory ? `
+<div class="sec">
+  <div class="sec-label">対局一覧</div>
+  ${histItems}
+</div>
+<div class="sec gap8">
+  <button class="btn btn-secondary" data-act="exportCSV">📊 CSVでダウンロード</button>
+</div>
+` : '<div class="empty">まだ対局履歴がありません</div>'}
+
+<div class="sec">
+  <div class="danger-zone">
+    <div class="sec-label" style="margin-bottom:8px">データ管理</div>
+    <button class="btn btn-danger" style="font-size:13px;padding:11px" data-act="resetAll">
+      全データをリセット
+    </button>
+  </div>
+</div>
+
+</div>`;
+}
+
+/* ──────────────────────────────────────────────────────
+   Render entry point
+────────────────────────────────────────────────────── */
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render() {
+  const app = document.getElementById('app');
+  switch (S.screen) {
+    case 'setup':   app.innerHTML = renderSetup();   break;
+    case 'game':    app.innerHTML = renderGame();    break;
+    case 'result':  app.innerHTML = renderResult();  break;
+    case 'history': app.innerHTML = renderHistory(); break;
+    default:        app.innerHTML = renderSetup();
+  }
+  // Focus modal input if open
+  const mi = document.getElementById('modalInp');
+  if (mi) {
+    mi.focus();
+    mi.addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.querySelector('[data-act="applyModal"]')?.click();
+    });
+  }
+}
+
+/* ──────────────────────────────────────────────────────
+   Event handling
+────────────────────────────────────────────────────── */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const act = el.dataset.act;
+
+  switch (act) {
+
+    case 'setPC': {
+      const v = parseInt(el.dataset.v);
+      S.playerCount = v;
+      // Ensure 4 player slots exist
+      while (S.players.length < 4) {
+        S.players.push({name:SEAT_LABELS[S.players.length], score:S.rules.startPoints, total:0});
+      }
+      render();
+      break;
+    }
+
+    case 'setGameType':
+      S.rules.gameType = el.dataset.v;
+      render();
+      break;
+
+    case 'setOka':
+      S.rules.okaEnabled = el.dataset.v === '1';
+      render();
+      break;
+
+    case 'startGame':
+      startGame();
+      break;
+
+    case 'resumeGame':
+      S.screen = 'game';
+      save();
+      render();
+      break;
+
+    case 'toSetup':
+      if (S.screen === 'game') {
+        if (!confirm('設定画面に戻りますか？\n（現在の対局は保存されます）')) break;
+      }
+      S.prevScreen = S.screen;
+      S.screen = 'setup';
+      save();
+      render();
+      break;
+
+    case 'toHistory':
+      S.prevScreen = S.screen;
+      S.screen = 'history';
+      render();
+      break;
+
+    case 'backHistory':
+      S.screen = S.prevScreen || 'setup';
+      render();
+      break;
+
+    case 'openEdit':
+      S.modal = {playerIdx: parseInt(el.dataset.i)};
+      render();
+      break;
+
+    case 'closeModal':
+      S.modal = null;
+      render();
+      break;
+
+    case 'qs': {
+      const i = parseInt(el.dataset.i);
+      const d = parseInt(el.dataset.d);
+      applyDelta(i, d);
+      break;
+    }
+
+    case 'qm': {
+      if (!S.modal) break;
+      const v = parseInt(el.dataset.v);
+      applyDelta(S.modal.playerIdx, v);
+      S.modal = null;
+      render();
+      break;
+    }
+
+    case 'applyModal': {
+      if (!S.modal) break;
+      const inp = document.getElementById('modalInp');
+      const v = parseInt(inp?.value, 10);
+      if (!isNaN(v) && v !== 0) applyDelta(S.modal.playerIdx, v);
+      S.modal = null;
+      render();
+      break;
+    }
+
+    case 'undo':
+      undo();
+      break;
+
+    case 'nextRound':
+      advanceRound(1);
+      break;
+
+    case 'adjRound':
+      advanceRound(parseInt(el.dataset.v));
+      break;
+
+    case 'adjHonba': {
+      const v = parseInt(el.dataset.v);
+      S.game.honba = Math.max(0, S.game.honba + v);
+      save();
+      render();
+      break;
+    }
+
+    case 'adjRiichi': {
+      const v = parseInt(el.dataset.v);
+      S.game.riichiSticks = Math.max(0, S.game.riichiSticks + v);
+      save();
+      render();
+      break;
+    }
+
+    case 'endGame':
+      if (confirm('対局を終了して精算しますか？')) endGame();
+      break;
+
+    case 'nextGame':
+      nextGame();
+      break;
+
+    case 'exportCSV':
+      exportCSV();
+      break;
+
+    case 'resetAll':
+      resetAll();
+      break;
+  }
+});
+
+// Live save for text inputs (name, uma, etc.) — no re-render to preserve focus
+document.addEventListener('input', e => {
+  const el = e.target;
+  const field = el.dataset.field;
+  if (!field) return;
+  if (field === 'name') {
+    const i = parseInt(el.dataset.i);
+    if (S.players[i]) S.players[i].name = el.value;
+  } else if (field === 'startPoints' || field === 'returnPoints' || field === 'oka') {
+    const v = parseInt(el.value, 10);
+    if (!isNaN(v)) S.rules[field] = v;
+  } else if (field === 'uma4raw') {
+    S.rules.uma4raw = el.value;
+    S.rules.uma4 = parseUma(el.value);
+  } else if (field === 'uma3raw') {
+    S.rules.uma3raw = el.value;
+    S.rules.uma3 = parseUma(el.value);
+  }
+});
+
+/* ──────────────────────────────────────────────────────
+   Boot
+────────────────────────────────────────────────────── */
+render();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
