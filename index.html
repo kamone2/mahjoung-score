@@ -255,7 +255,7 @@ function saveReg(){try{localStorage.setItem(REG_KEY,JSON.stringify(REG));}catch(
 function newId(){return'p'+Date.now()+Math.random().toString(36).slice(2,5);}
 function addPlayer(name){
   const id=newId();
-  REG[id]={id,name,stats:{games:0,hands:0,wins:0,tsumo:0,ron:0,dealIns:0,openHands:0,riichi:0,rank:[0,0,0,0],totalPts:0}};
+  REG[id]={id,name,stats:{games:0,hands:0,wins:0,tsumo:0,ron:0,dealIns:0,openHands:0,riichi:0,riichiWins:0,damatenWins:0,nakiWins:0,rank:[0,0,0,0],totalPts:0}};
   saveReg();return id;
 }
 
@@ -367,7 +367,7 @@ function undo(){if(!S.undoStack.length)return;const snap=S.undoStack.pop();S.pla
 function getSW(idx,dlr,pc){return(idx-dlr+pc)%pc;}
 function getRoundLabel(){const{windIdx:wi,roundNum:rn}=S.game;const maxW=S.rules.gameType==='hanchan'?2:1;return`${WINDS[wi]}${rn}局${wi===maxW-1&&rn===S.playerCount?'（オーラス）':''}`;}
 function getRanks(){return S.players.slice(0,S.playerCount).map((p,i)=>S.players.slice(0,S.playerCount).filter((q,j)=>q.score>p.score||(q.score===p.score&&j<i)).length+1);}
-function declareRiichi(idx){if(S.players[idx].score<1000||S.game.riichiFlags[idx])return;pushUndo();S.players[idx].score-=1000;S.game.riichiFlags[idx]=true;S.game.riichiSticks++;checkBust(idx);save();render();}
+function declareRiichi(idx){if(S.players[idx].score<1000||S.game.riichiFlags[idx]||S.game.nakiFlags[idx])return;pushUndo();S.players[idx].score-=1000;S.game.riichiFlags[idx]=true;S.game.riichiSticks++;checkBust(idx);save();render();}
 function declareNaki(idx){pushUndo();S.game.nakiFlags[idx]=!S.game.nakiFlags[idx];save();render();}
 function checkBust(idx){if(S.players[idx].score<0)S.bustPlayerIdx=idx;}
 function advRound(){const maxW=S.rules.gameType==='hanchan'?2:1;S.game.dealerIdx=(S.game.dealerIdx+1)%S.playerCount;if(S.game.roundNum<S.playerCount)S.game.roundNum++;else if(S.game.windIdx<maxW-1){S.game.windIdx++;S.game.roundNum=1;}}
@@ -381,7 +381,12 @@ function applyHand(hi){
     S.players.slice(0,S.playerCount).forEach((p,i)=>{
       const r=REG[p.id];if(!r)return;
       r.stats.hands++;
-      if(i===hi.winnerIdx){r.stats.wins++;if(hi.type==='tsumo')r.stats.tsumo++;else r.stats.ron++;if(hi.isOpenHand)r.stats.openHands++;}
+      if(i===hi.winnerIdx){
+        r.stats.wins++;if(hi.type==='tsumo')r.stats.tsumo++;else r.stats.ron++;
+        if(hi.isOpenHand){r.stats.openHands++;r.stats.nakiWins=( r.stats.nakiWins||0)+1;}
+        else if(S.game.riichiFlags[i]){r.stats.riichiWins=(r.stats.riichiWins||0)+1;}
+        else{r.stats.damatenWins=(r.stats.damatenWins||0)+1;}
+      }
       if(hi.type==='ron'&&i===hi.discarderIdx)r.stats.dealIns++;
       if(S.game.riichiFlags[i])r.stats.riichi++;
     });
@@ -511,7 +516,14 @@ function renderSetup(){
 </div></div>
 <div class="sec"><div class="sec-lbl">飛び</div><div class="card"><div class="tgl"><button class="tgl-btn ${r.bustEnds?'on':''}" data-act="setBust" data-v="1">飛びで終了</button><button class="tgl-btn ${!r.bustEnds?'on':''}" data-act="setBust" data-v="0">続行する</button></div></div></div>
 <div class="sec"><div class="sec-lbl">チョンボ</div><div class="card"><div class="preset-group">${chonboBtns}</div></div></div>
-<div class="sec"><div class="sec-lbl">レート</div><div class="card"><div class="preset-group">${rateBtns}</div></div></div>
+<div class="sec"><div class="sec-lbl">レート</div><div class="card">
+  <div class="preset-group">${rateBtns}</div>
+  <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+    <label class="lbl" style="margin:0;white-space:nowrap">カスタム:</label>
+    <input class="inp" type="number" data-field="rate" value="${r.rate}" min="0" step="1" style="flex:1">
+    <span style="font-size:12px;color:var(--muted);white-space:nowrap">円/pt</span>
+  </div>
+</div></div>
 <div class="sec"><div class="sec-lbl">祝儀</div><div class="card">
   <div class="field"><div class="tgl"><button class="tgl-btn ${r.shuugiEnabled?'on':''}" data-act="setShuugi" data-v="1">あり</button><button class="tgl-btn ${!r.shuugiEnabled?'on':''}" data-act="setShuugi" data-v="0">なし</button></div></div>
   ${r.shuugiEnabled?`<div class="field"><label class="lbl">1枚あたりの点数</label><div class="preset-group">${shuugiValBtns}</div></div>`:''}
@@ -541,7 +553,7 @@ function renderGame(){
       <div class="pnl-score" style="color:${isR?'var(--danger)':isN?'var(--primary)':'var(--text)'}">${fmt(p.score)}</div>
       <div class="pnl-meta"><span class="${dc(delta)}">${delta>=0?'+':''}${fmt(delta)}</span> 累:<span class="${dc(p.total)}">${fmtPt(p.total)}</span></div>
       <div class="pnl-actions">
-        <button class="pnl-act pnl-r-btn ${isR?'on':''}" data-act="riichi" data-i="${idx}">${isR?'🎴リーチ中':'リーチ'}</button>
+        <button class="pnl-act pnl-r-btn ${isR?'on':''}" data-act="riichi" data-i="${idx}" ${isN&&!isR?'disabled style="opacity:.3"':''}>${isR?'🎴リーチ中':'リーチ'}</button>
         <button class="pnl-act pnl-n-btn ${isN?'on':''}" data-act="naki" data-i="${idx}">${isN?'鳴き✓':'鳴き'}</button>
       </div>
     </div>`;
@@ -723,6 +735,8 @@ function renderHistory(){
         <div class="stat-card"><div class="stat-val">${avg}</div><div class="stat-lbl">平均順位</div></div>
       </div>
       <div style="font-size:10px;color:var(--muted);margin-top:5px">${st.rank.map((c,i)=>`${i+1}位:${c}回`).join(' / ')}</div>
+      ${st.wins>0?`<div style="font-size:10px;color:var(--muted);margin-top:3px">和了内訳 — リーチ:${st.riichiWins||0}回 / ダマテン:${st.damatenWins||0}回 / 副露:${st.nakiWins||0}回</div>`:''}
+
     </div>`;}).join('');
   const items=[...S.gameHistory].reverse().map(g=>{const sorted=[...g.results].sort((a,b)=>a.rank-b.rank);
     return`<div class="hist-item"><div class="hist-meta">第${g.gameNum}半荘 · ${g.date}</div>
