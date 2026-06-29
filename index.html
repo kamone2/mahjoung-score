@@ -13,7 +13,9 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0f1923;
+  --bg:#0a1a0f;
+  --felt:#0d2a18;
+  --felt2:#112e1c;
   --surface:#1a2a3a;
   --card:#1e3248;
   --border:#2e4a68;
@@ -25,125 +27,27 @@
   --bronze:#c0773a;
   --text:#ecf0f1;
   --muted:#6e8a9e;
-  --tile:#fdf6e3;
+  --riichi:#e74c3c;
 }
-html,body{
-  height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Hiragino Sans',Meiryo,sans-serif;
-  font-size:16px;
-  overflow-x:hidden;
-}
-#app{
-  min-height:100vh;
-  max-width:500px;
-  margin:0 auto;
-}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;font-size:16px;overflow-x:hidden}
+#app{min-height:100vh;max-width:500px;margin:0 auto}
 
 /* ── Header ── */
-.hdr{
-  background:var(--surface);
-  padding:12px 16px;
-  padding-top:calc(12px + env(safe-area-inset-top));
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid var(--border);
-  position:sticky;
-  top:0;
-  z-index:20;
-}
-.hdr-title{font-size:17px;font-weight:700;letter-spacing:.3px}
-.hdr-btn{
-  background:none;
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:6px 14px;
-  border-radius:8px;
-  font-size:13px;
-  cursor:pointer;
-  min-width:52px;
-  text-align:center;
-}
+.hdr{background:var(--surface);padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:30}
+.hdr-title{font-size:17px;font-weight:700}
+.hdr-btn{background:none;border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:8px;font-size:13px;cursor:pointer;min-width:52px;text-align:center}
 .hdr-btn:active{opacity:.6}
 
-/* ── Layout ── */
-.body{padding:12px 14px;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+/* ── Body ── */
+.body{padding:12px 14px;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
 .sec{margin-bottom:16px}
-.sec-label{
-  font-size:11px;
-  font-weight:700;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.8px;
-  margin-bottom:8px;
-}
+.sec-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
 
 /* ── Cards ── */
-.card{
-  background:var(--card);
-  border-radius:14px;
-  padding:16px;
-  border:1px solid var(--border);
-}
-
-/* ── Toggle group ── */
-.tgl{
-  display:flex;
-  background:#0a1520;
-  border-radius:10px;
-  padding:4px;
-  gap:4px;
-}
-.tgl-btn{
-  flex:1;
-  padding:9px 8px;
-  border:none;
-  background:none;
-  color:var(--muted);
-  border-radius:7px;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  transition:all .18s;
-}
-.tgl-btn.on{background:var(--primary);color:#fff}
-.tgl-btn:active{opacity:.7}
-
-/* ── Inputs ── */
-.inp{
-  background:#0a1520;
-  border:1px solid var(--border);
-  border-radius:9px;
-  color:var(--text);
-  padding:11px 14px;
-  font-size:16px;
-  width:100%;
-  outline:none;
-  appearance:none;
-}
-.inp:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(52,152,219,.2)}
-.lbl{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:500}
-.field{margin-bottom:14px}
-.field:last-child{margin-bottom:0}
+.card{background:var(--card);border-radius:14px;padding:16px;border:1px solid var(--border)}
 
 /* ── Buttons ── */
-.btn{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  border:none;
-  border-radius:11px;
-  font-size:15px;
-  font-weight:700;
-  cursor:pointer;
-  padding:14px 18px;
-  width:100%;
-  transition:opacity .15s,transform .1s;
-  letter-spacing:.2px;
-}
+.btn{display:flex;align-items:center;justify-content:center;gap:5px;border:none;border-radius:11px;font-size:15px;font-weight:700;cursor:pointer;padding:14px 18px;width:100%;transition:opacity .15s,transform .1s;letter-spacing:.2px}
 .btn:active{opacity:.75;transform:scale(.98)}
 .btn:disabled{opacity:.35;pointer-events:none}
 .btn-primary{background:var(--primary);color:#fff}
@@ -152,249 +56,199 @@ html,body{
 .btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}
 .btn-warn{background:var(--warn);color:#000}
 .btn-sm{font-size:13px;padding:9px 14px;border-radius:8px;width:auto}
+.btn-xs{font-size:12px;padding:7px 10px;border-radius:7px;width:auto}
 
-/* ── Player name grid ── */
-.name-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* ── Toggle ── */
+.tgl{display:flex;background:#050f08;border-radius:10px;padding:4px;gap:4px}
+.tgl-btn{flex:1;padding:9px 8px;border:none;background:none;color:var(--muted);border-radius:7px;font-size:14px;font-weight:600;cursor:pointer;transition:all .18s}
+.tgl-btn.on{background:var(--primary);color:#fff}
+.tgl-btn:active{opacity:.7}
 
-/* ── Round bar ── */
-.round-bar{
-  background:var(--card);
-  border-radius:13px;
-  border:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  padding:10px 8px;
-  gap:4px;
-}
-.round-cell{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-}
-.round-cell-lbl{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
-.round-cell-row{display:flex;align-items:center;gap:5px}
-.round-cell-val{font-size:18px;font-weight:800;min-width:40px;text-align:center}
-.round-sep{width:1px;height:36px;background:var(--border);flex-shrink:0}
-.adj-btn{
-  background:var(--border);
-  border:none;
-  color:var(--text);
-  width:28px;
-  height:28px;
-  border-radius:7px;
-  font-size:17px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  flex-shrink:0;
-}
-.adj-btn:active{opacity:.6}
+/* ── Inputs ── */
+.inp{background:#050f08;border:1px solid var(--border);border-radius:9px;color:var(--text);padding:11px 14px;font-size:16px;width:100%;outline:none;appearance:none}
+.inp:focus{border-color:var(--primary)}
+.lbl{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:500}
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
 
-/* ── Player card ── */
-.pcard{
-  background:var(--card);
-  border-radius:15px;
-  padding:14px;
-  border:2px solid var(--border);
-  margin-bottom:10px;
-  transition:border-color .2s;
-}
-.pcard:last-child{margin-bottom:0}
-.pcard.r1{border-color:var(--warn)}
-.pcard.r2{border-color:var(--silver)}
-.pcard.r3{border-color:var(--bronze)}
-.pcard-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
-.pcard-name{font-size:16px;font-weight:700}
-.pcard-seat{font-size:11px;color:var(--muted);margin-left:5px}
-.rank-badge{
-  font-size:11px;
-  font-weight:800;
-  padding:3px 9px;
-  border-radius:12px;
-  letter-spacing:.3px;
-}
-.rb1{background:var(--warn);color:#000}
-.rb2{background:var(--silver);color:#000}
-.rb3{background:var(--bronze);color:#fff}
-.rb4{background:var(--border);color:var(--muted)}
-.pcard-score{
-  font-size:38px;
-  font-weight:900;
-  letter-spacing:-1.5px;
-  line-height:1;
-  margin:6px 0 4px;
-}
-.pcard-meta{font-size:12px;color:var(--muted);margin-bottom:10px}
-.score-pos{color:var(--success)}
-.score-neg{color:var(--danger)}
-.score-zero{color:var(--muted)}
+/* ── Home: Player Registry ── */
+.player-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.player-item:last-child{border-bottom:none}
+.player-avatar{width:40px;height:40px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0}
+.player-info{flex:1;min-width:0}
+.player-name-reg{font-size:15px;font-weight:700}
+.player-stats-reg{font-size:11px;color:var(--muted);margin-top:2px}
+.player-select-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
+.player-select-dot.sel{background:var(--success);border-color:var(--success)}
+.player-select-dot:active{opacity:.6}
+.seat-order{background:var(--warn);color:#000;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
 
-/* Score action buttons row */
-.sbtns{display:flex;gap:5px}
-.sbtn{
-  flex:1;
-  padding:9px 2px;
-  border-radius:8px;
-  font-size:12px;
-  font-weight:700;
-  cursor:pointer;
-  border:none;
-  text-align:center;
-}
-.sbtn:active{opacity:.65}
-.sbtn-m2{background:#2d1010;border:1px solid #6a1515;color:#ff7070}
-.sbtn-m1{background:#231010;border:1px solid #5a1010;color:#ff9090}
-.sbtn-edit{background:var(--surface);border:1px solid var(--border);color:var(--muted)}
-.sbtn-p1{background:#0d2310;border:1px solid #1a6a20;color:#70dd70}
-.sbtn-p2{background:#112910;border:1px solid #1f7a28;color:#50ee70}
+/* ── Table Layout ── */
+.table-wrap{background:var(--felt);border-radius:16px;border:3px solid #0a2012;position:relative;overflow:hidden;margin-bottom:8px}
+.table-inner{display:grid;grid-template-columns:72px 1fr 72px;grid-template-rows:auto 1fr auto;min-height:300px}
+/* panel containers in the grid */
+.slot-top{grid-column:2;grid-row:1;display:flex;justify-content:center;padding:6px 4px 0}
+.slot-bottom{grid-column:2;grid-row:3;display:flex;justify-content:center;padding:0 4px 6px}
+.slot-left{grid-column:1;grid-row:2;display:flex;align-items:center;justify-content:center;overflow:visible;padding:4px 0}
+.slot-right{grid-column:3;grid-row:2;display:flex;align-items:center;justify-content:center;overflow:visible;padding:4px 0}
+.slot-center{grid-column:2;grid-row:2;display:flex;align-items:center;justify-content:center}
 
-/* ── Bottom nav ── */
-.bnav{
-  display:flex;
-  gap:8px;
-  padding:10px 14px;
-  padding-bottom:calc(10px + env(safe-area-inset-bottom));
-  background:var(--bg);
-  border-top:1px solid var(--border);
-  position:sticky;
-  bottom:0;
-  z-index:20;
-}
-.bnav .btn{flex:1;padding:14px 8px;font-size:14px}
+/* Player panel */
+.pnl{background:rgba(10,20,30,.85);border:1px solid rgba(46,74,104,.7);border-radius:10px;padding:7px 10px;cursor:pointer;transition:border-color .2s}
+.pnl.dealer{border-color:var(--warn) !important}
+.pnl.riichi-on{border-color:var(--riichi) !important}
+.pnl-row1{display:flex;align-items:center;gap:5px;margin-bottom:3px;white-space:nowrap}
+.pnl-wind{font-size:11px;font-weight:800;color:var(--warn);background:rgba(241,196,15,.15);padding:1px 5px;border-radius:4px}
+.pnl-dealer-mark{font-size:10px;color:var(--warn);font-weight:700}
+.pnl-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;max-width:80px}
+.pnl-riichi-icon{font-size:14px;color:var(--riichi);margin-left:auto}
+.pnl-score{font-size:22px;font-weight:900;letter-spacing:-1px;line-height:1;white-space:nowrap}
+.pnl-meta{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap}
 
-/* ── Score diff hint ── */
-.diff-hint{
-  text-align:right;
-  font-size:11px;
-  margin-top:5px;
-  font-weight:600;
-}
+/* rotated panels */
+.pnl-top-wrap{transform:rotate(180deg)}
+.pnl-left-wrap{transform:rotate(90deg);width:160px;flex-shrink:0}
+.pnl-right-wrap{transform:rotate(-90deg);width:160px;flex-shrink:0}
 
-/* ── Modal / bottom sheet ── */
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.65);
-  z-index:100;
-  display:flex;
-  align-items:flex-end;
-  animation:fadeIn .15s;
-}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.sheet{
-  background:var(--surface);
-  border-radius:22px 22px 0 0;
-  padding:20px 16px;
-  padding-bottom:calc(20px + env(safe-area-inset-bottom));
-  width:100%;
-  max-height:88vh;
-  overflow-y:auto;
-  border-top:1px solid var(--border);
-  animation:slideUp .2s;
-}
-@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
-.sheet-name{font-size:14px;color:var(--muted);font-weight:600;margin-bottom:2px}
-.sheet-score{font-size:32px;font-weight:900;color:var(--primary);margin-bottom:18px;letter-spacing:-1px}
-.qbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
-.qbtn{
-  padding:11px 2px;
-  border:none;
-  border-radius:9px;
-  font-size:12px;
-  font-weight:700;
-  cursor:pointer;
-  text-align:center;
-}
-.qbtn:active{opacity:.65}
-.qbtn-p{background:#0d2d10;border:1px solid #1d6a22;color:#70ee70}
-.qbtn-m{background:#2d1010;border:1px solid #7a2020;color:#ff7070}
-.custom-row{display:flex;gap:8px;margin-top:14px;margin-bottom:14px}
+/* Center table info */
+.table-center{background:rgba(5,15,8,.7);border:1px solid rgba(46,74,104,.5);border-radius:12px;padding:10px 12px;text-align:center;min-width:140px}
+.tc-round{font-size:17px;font-weight:900;letter-spacing:.3px;margin-bottom:4px}
+.tc-row{display:flex;justify-content:center;gap:12px;margin-bottom:6px}
+.tc-item{text-align:center}
+.tc-lbl{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.tc-val{font-size:15px;font-weight:800}
+.tc-timer{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:8px;font-variant-numeric:tabular-nums}
+.tc-btn{background:var(--success);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:14px;font-weight:800;cursor:pointer;width:100%;letter-spacing:.3px}
+.tc-btn:active{opacity:.7}
+.tc-ref{background:rgba(255,255,255,.08);border:none;border-radius:6px;padding:5px 10px;font-size:11px;color:var(--muted);cursor:pointer;margin-top:5px;width:100%}
+.tc-ref:active{opacity:.7}
 
-/* ── Result screen ── */
-.result-card{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  background:var(--card);
-  border-radius:14px;
-  padding:14px 16px;
-  margin-bottom:8px;
-  border:1px solid var(--border);
-}
-.result-rank{font-size:28px;width:40px;text-align:center;flex-shrink:0}
+/* Riichi indicator strip */
+.riichi-strip{position:absolute;background:var(--riichi);opacity:.7}
+
+/* ── Bottom Nav ── */
+.bnav{display:flex;gap:8px;padding:10px 14px;padding-bottom:calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--border);position:sticky;bottom:0;z-index:20}
+.bnav .btn{flex:1;padding:13px 6px;font-size:13px}
+
+/* ── Hand Input Overlay ── */
+.hi-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;display:flex;flex-direction:column;overflow-y:auto}
+.hi-wrap{background:var(--surface);min-height:100%;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+.hi-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.hi-back{background:none;border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer}
+.hi-title{font-size:18px;font-weight:800}
+.hi-step-lbl{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+
+/* type buttons */
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.type-btn{padding:20px 10px;border:2px solid var(--border);border-radius:14px;background:var(--card);color:var(--text);font-size:16px;font-weight:800;cursor:pointer;text-align:center;transition:all .15s}
+.type-btn:active{opacity:.7}
+.type-btn.sel{border-color:var(--primary);background:rgba(52,152,219,.15)}
+.type-icon{font-size:28px;display:block;margin-bottom:4px}
+
+/* player select for hand input */
+.hi-players{display:flex;flex-direction:column;gap:8px}
+.hi-player-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;background:var(--card);cursor:pointer;transition:all .15s}
+.hi-player-btn:active{opacity:.7}
+.hi-player-btn.sel{border-color:var(--success);background:rgba(46,204,113,.1)}
+.hi-player-btn.sel-secondary{border-color:var(--danger);background:rgba(231,76,60,.1)}
+.hi-player-btn.disabled{opacity:.3;pointer-events:none}
+.hi-player-wind{font-size:13px;font-weight:800;color:var(--warn);width:32px;text-align:center}
+.hi-player-name{font-size:15px;font-weight:700;flex:1}
+.hi-player-score{font-size:14px;color:var(--muted)}
+.hi-player-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);background:none;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.hi-player-btn.sel .hi-player-check{background:var(--success);border-color:var(--success)}
+.hi-player-btn.sel-secondary .hi-player-check{background:var(--danger);border-color:var(--danger)}
+
+/* Points input */
+.han-row{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:16px}
+.han-adj{width:44px;height:44px;border-radius:50%;border:2px solid var(--border);background:var(--card);color:var(--text);font-size:24px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.han-adj:active{opacity:.6}
+.han-val{font-size:36px;font-weight:900;min-width:60px;text-align:center}
+.han-lbl{font-size:13px;color:var(--muted);text-align:center;margin-top:-8px;margin-bottom:16px}
+.fu-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px}
+.fu-btn{padding:10px 4px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;text-align:center}
+.fu-btn.on{border-color:var(--primary);background:rgba(52,152,219,.2);color:var(--primary)}
+.fu-btn:active{opacity:.65}
+.mangan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px}
+.mg-btn{padding:12px 4px;border:2px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:13px;font-weight:800;cursor:pointer;text-align:center}
+.mg-btn.on{border-color:var(--warn);background:rgba(241,196,15,.15);color:var(--warn)}
+.mg-btn:active{opacity:.65}
+
+/* Payment preview */
+.preview-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px}
+.preview-title{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:10px}
+.preview-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)}
+.preview-row:last-child{border-bottom:none}
+.preview-name{font-size:13px;font-weight:600}
+.preview-amount{font-size:15px;font-weight:800}
+.preview-pos{color:var(--success)}
+.preview-neg{color:var(--danger)}
+
+/* Ryukyoku / tenpai select */
+.tenpai-label{font-size:13px;color:var(--muted);margin-bottom:8px}
+
+/* Bust alert */
+.bust-overlay{position:fixed;inset:0;background:rgba(150,0,0,.7);z-index:90;display:flex;align-items:center;justify-content:center;animation:fadeIn .3s}
+.bust-box{background:#1a0505;border:3px solid var(--danger);border-radius:20px;padding:32px 24px;text-align:center;max-width:300px}
+.bust-title{font-size:28px;font-weight:900;color:var(--danger);margin-bottom:8px}
+.bust-sub{font-size:16px;color:var(--text);margin-bottom:24px}
+
+/* Score table modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:60;display:flex;align-items:flex-end}
+.modal-sheet{background:var(--surface);border-radius:22px 22px 0 0;padding:20px 16px;padding-bottom:calc(20px + env(safe-area-inset-bottom));width:100%;max-height:88vh;overflow-y:auto;border-top:1px solid var(--border)}
+.score-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.score-tbl th{background:var(--card);padding:6px 4px;text-align:center;font-size:11px;color:var(--muted);border:1px solid var(--border)}
+.score-tbl td{padding:5px 4px;text-align:center;border:1px solid var(--border);font-size:11px}
+.score-tbl .dealer{background:rgba(241,196,15,.1);color:var(--warn);font-weight:700}
+.score-tbl .mangan{background:rgba(231,76,60,.1);color:var(--danger);font-weight:800}
+
+/* Result */
+.result-card{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:14px;padding:14px;margin-bottom:8px;border:1px solid var(--border)}
+.result-rank{font-size:28px;width:38px;text-align:center;flex-shrink:0}
 .result-body{flex:1;min-width:0}
 .result-name{font-size:17px;font-weight:700}
-.result-breakdown{font-size:11px;color:var(--muted);margin-top:2px}
+.result-detail{font-size:11px;color:var(--muted);margin-top:2px}
 .result-pts{font-size:26px;font-weight:900;flex-shrink:0}
 
-/* ── Cumulative bar ── */
-.cumul{
-  background:var(--card);
-  border-radius:13px;
-  border:1px solid var(--border);
-  overflow:hidden;
-}
-.cumul-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:11px 16px;
-  border-bottom:1px solid var(--border);
-}
+/* Cumulative */
+.cumul{background:var(--card);border-radius:13px;border:1px solid var(--border);overflow:hidden}
+.cumul-row{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border)}
 .cumul-row:last-child{border-bottom:none}
 .cumul-name{font-size:14px;font-weight:600}
 .cumul-total{font-size:16px;font-weight:800}
 
-/* ── History ── */
-.hist-item{
-  background:var(--card);
-  border-radius:12px;
-  border:1px solid var(--border);
-  padding:12px 14px;
-  margin-bottom:8px;
-}
+/* Stats */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--card);border-radius:12px;padding:12px;border:1px solid var(--border);text-align:center}
+.stat-val{font-size:22px;font-weight:900;margin-bottom:2px}
+.stat-lbl{font-size:11px;color:var(--muted);font-weight:600}
+
+/* History */
+.hist-item{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:12px 14px;margin-bottom:8px}
 .hist-meta{font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:500}
 .hist-players{display:flex;gap:6px;flex-wrap:wrap}
-.hist-p{
-  flex:1;
-  min-width:70px;
-  background:#0a1520;
-  border-radius:8px;
-  padding:7px 8px;
-  text-align:center;
-}
+.hist-p{flex:1;min-width:70px;background:#050f08;border-radius:8px;padding:6px 8px;text-align:center}
 .hist-p-rank{font-size:10px;color:var(--muted);font-weight:600}
 .hist-p-name{font-size:12px;font-weight:700;margin:1px 0}
-.hist-p-pts{font-size:14px;font-weight:800}
+.hist-p-pts{font-size:13px;font-weight:800}
 
-/* ── Misc ── */
+/* Misc */
+.gap8{display:flex;flex-direction:column;gap:8px}
+.gap6{display:flex;flex-direction:column;gap:6px}
+.row{display:flex;gap:8px}
+.row>.btn{flex:1}
+.pos{color:var(--success)}
+.neg{color:var(--danger)}
+.muted{color:var(--muted)}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
 .mt8{margin-top:8px}
 .mt12{margin-top:12px}
 .mt16{margin-top:16px}
-.gap8{display:flex;flex-direction:column;gap:8px}
-.row{display:flex;gap:8px}
-.row>.btn{flex:1}
-.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
-.badge{
-  display:inline-block;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:2px 8px;
-  font-size:11px;
-  font-weight:600;
-  color:var(--muted);
-}
-.danger-zone{
-  background:#200a0a;
-  border:1px solid #5a1515;
-  border-radius:12px;
-  padding:12px 14px;
-}
+.divider{border:none;border-top:1px solid var(--border);margin:12px 0}
+.danger-zone{background:#1a0505;border:1px solid #5a1515;border-radius:12px;padding:12px 14px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.slide-up{animation:slideUp .2s}
 </style>
 </head>
 <body>
@@ -402,845 +256,1143 @@ html,body{
 <script>
 'use strict';
 
-/* ──────────────────────────────────────────────────────
-   Constants
-────────────────────────────────────────────────────── */
+/* =====================================================================
+   CONSTANTS
+===================================================================== */
 const WINDS = ['東','南','西','北'];
 const SEAT_LABELS = ['東家','南家','西家','北家'];
 const RANK_ICONS = ['🥇','🥈','🥉','4️⃣'];
-const STORAGE_KEY = 'mahjong_app_v3';
+const REG_KEY = 'mj_registry_v1';
+const SES_KEY = 'mj_session_v1';
+const FU_LIST = [20,25,30,40,50,60,70,80,90,100];
+const MANGAN_LEVELS = ['mangan','haneman','baiman','sanbaiman','yakuman'];
+const MANGAN_LABELS = {'mangan':'満貫','haneman':'跳満','baiman':'倍満','sanbaiman':'三倍満','yakuman':'役満'};
+const MANGAN_BASE = {mangan:2000,haneman:3000,baiman:4000,sanbaiman:6000,yakuman:8000};
 
-/* ──────────────────────────────────────────────────────
-   State
-────────────────────────────────────────────────────── */
-function defaultState() {
+/* =====================================================================
+   PLAYER REGISTRY
+===================================================================== */
+let REG = {};
+function loadReg(){try{const r=localStorage.getItem(REG_KEY);if(r)REG=JSON.parse(r);}catch(e){}}
+function saveReg(){try{localStorage.setItem(REG_KEY,JSON.stringify(REG));}catch(e){}}
+function newPlayerId(){return 'p'+Date.now()+Math.random().toString(36).slice(2,6);}
+function addPlayer(name){
+  const id=newPlayerId();
+  REG[id]={id,name,stats:{games:0,hands:0,wins:0,tsumo:0,ron:0,dealIns:0,openHands:0,riichi:0,rank:[0,0,0,0],totalPts:0}};
+  saveReg();return id;
+}
+function deletePlayer(id){delete REG[id];saveReg();}
+
+/* =====================================================================
+   SESSION STATE
+===================================================================== */
+function defaultSession(){
   return {
-    screen: 'setup',
-    prevScreen: 'setup',
-    playerCount: 4,
-    players: [
-      {name:'東家',score:25000,total:0},
-      {name:'南家',score:25000,total:0},
-      {name:'西家',score:25000,total:0},
-      {name:'北家',score:25000,total:0},
-    ],
-    rules: {
-      gameType: 'hanchan',
-      startPoints: 25000,
-      returnPoints: 30000,
-      uma4raw: '20,10,-10,-20',
-      uma3raw: '15,0,-15',
-      uma4: [20,10,-10,-20],
-      uma3: [15,0,-15],
-      okaEnabled: true,
-      oka: 20,
+    screen:'home',prevScreen:'home',
+    playerCount:4,
+    selectedIds:[],          // registry ids, ordered by seat
+    rules:{
+      gameType:'hanchan',
+      startPoints:25000,returnPoints:30000,
+      uma4raw:'20,10,-10,-20',uma4:[20,10,-10,-20],
+      uma3raw:'15,0,-15',uma3:[15,0,-15],
+      okaEnabled:true,oka:20,
     },
-    game: {windIdx:0, roundNum:1, honba:0, riichiSticks:0},
-    gameHistory: [],
-    undoStack: [],
-    modal: null,
-    gameCount: 0,
+    players:[],              // [{id,name,score,total,riichiPaid}]
+    game:{
+      windIdx:0,roundNum:1,honba:0,riichiSticks:0,
+      dealerIdx:0,
+      riichiFlags:[false,false,false,false],
+      timerSec:0,timerRunning:false,
+    },
+    handHistory:[],
+    gameHistory:[],
+    gameCount:0,
+    undoStack:[],
+    handInput:null,          // wizard state
+    bustPlayerIdx:-1,        // for bust overlay
+    showScoreTable:false,
   };
 }
 
-let S = (() => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const saved = JSON.parse(raw);
-      // Merge with defaults to handle schema upgrades
-      const def = defaultState();
-      return {
-        ...def,
-        ...saved,
-        rules: {...def.rules, ...saved.rules},
-        game: {...def.game, ...saved.game},
-        modal: null,
+let S = defaultSession();
+function loadSession(){
+  try{
+    const raw=localStorage.getItem(SES_KEY);
+    if(raw){
+      const saved=JSON.parse(raw);
+      S={...defaultSession(),...saved,
+        rules:{...defaultSession().rules,...saved.rules},
+        game:{...defaultSession().game,...saved.game},
+        handInput:null,bustPlayerIdx:-1,showScoreTable:false,
       };
     }
-  } catch(e) {}
-  return defaultState();
-})();
-
-function save() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({...S, modal:null, undoStack:S.undoStack.slice(-10)}));
-  } catch(e) {}
+  }catch(e){}
+}
+function saveSession(){
+  try{localStorage.setItem(SES_KEY,JSON.stringify({...S,handInput:null,bustPlayerIdx:-1,showScoreTable:false}));}catch(e){}
 }
 
-/* ──────────────────────────────────────────────────────
-   Undo
-────────────────────────────────────────────────────── */
-function pushUndo() {
-  S.undoStack.push({
-    players: S.players.map(p => ({...p})),
-    game: {...S.game},
-  });
-  if (S.undoStack.length > 20) S.undoStack.shift();
+/* =====================================================================
+   TIMER
+===================================================================== */
+let _timerInterval=null;
+function startTimer(){
+  if(_timerInterval||!S.game.timerRunning)return;
+  _timerInterval=setInterval(()=>{
+    S.game.timerSec++;
+    const el=document.getElementById('tc-timer');
+    if(el)el.textContent=fmtTimer(S.game.timerSec);
+  },1000);
+}
+function stopTimer(){clearInterval(_timerInterval);_timerInterval=null;}
+function fmtTimer(s){const m=Math.floor(s/60);return `${m}:${(s%60).toString().padStart(2,'0')}`;}
+
+/* =====================================================================
+   POINT CALCULATION
+===================================================================== */
+function roundUp100(n){return Math.ceil(n/100)*100;}
+
+function getBase(han,fu,manganLevel){
+  if(manganLevel)return MANGAN_BASE[manganLevel]||2000;
+  if(han>=13)return MANGAN_BASE.yakuman;
+  if(han>=11)return MANGAN_BASE.sanbaiman;
+  if(han>=8) return MANGAN_BASE.baiman;
+  if(han>=6) return MANGAN_BASE.haneman;
+  if(han>=5) return MANGAN_BASE.mangan;
+  const raw=fu*Math.pow(2,han+2);
+  return Math.min(raw,MANGAN_BASE.mangan);
 }
 
-function undo() {
-  if (!S.undoStack.length) return;
-  const snap = S.undoStack.pop();
-  S.players = snap.players;
-  S.game = snap.game;
-  save();
-  render();
+// Returns label for the result
+function getHandLabel(han,fu,manganLevel){
+  if(manganLevel)return MANGAN_LABELS[manganLevel];
+  const base=fu*Math.pow(2,han+2);
+  if(han>=13)return '数え役満';
+  if(han>=11)return '三倍満';
+  if(han>=8) return '倍満';
+  if(han>=6) return '跳満';
+  if(han>=5||base>=2000)return '満貫';
+  return `${han}翻${fu}符`;
 }
 
-/* ──────────────────────────────────────────────────────
-   Utilities
-────────────────────────────────────────────────────── */
-function fmt(n) { return n.toLocaleString('ja-JP'); }
-function fmtPt(n) { return (n > 0 ? '+' : '') + n; }
+// Returns array of {idx,delta} for all players
+function calcHandDeltas(hi){
+  const {type,winnerIdx,discarderIdx,han,fu,manganLevel,playerCount,dealerIdx,honba,riichiSticks,tenpaiFlags,isOpenHand}=hi;
+  const deltas=new Array(playerCount).fill(0);
 
-function getRanks() {
-  // Returns array[playerCount] of rank (1-based), seat order as tiebreaker
-  return S.players.slice(0, S.playerCount).map((p, i) => {
-    const better = S.players.slice(0, S.playerCount).filter((q, j) =>
-      q.score > p.score || (q.score === p.score && j < i)
-    ).length;
-    return better + 1;
-  });
-}
-
-function getRoundLabel() {
-  const {windIdx, roundNum} = S.game;
-  const maxWinds = S.rules.gameType === 'hanchan' ? 2 : 1;
-  const isLast = windIdx === maxWinds - 1 && roundNum === S.playerCount;
-  return `${WINDS[windIdx]}${roundNum}局${isLast ? '（オーラス）' : ''}`;
-}
-
-function getUma() {
-  return S.playerCount === 4 ? S.rules.uma4 : S.rules.uma3;
-}
-
-function parseUma(raw) {
-  return (raw || '').split(',').map(v => parseInt(v.trim(), 10)).filter(v => !isNaN(v));
-}
-
-function deltaColor(n) {
-  if (n > 0) return 'score-pos';
-  if (n < 0) return 'score-neg';
-  return 'score-zero';
-}
-
-/* ──────────────────────────────────────────────────────
-   Score mutations
-────────────────────────────────────────────────────── */
-function applyDelta(idx, delta) {
-  if (!delta || isNaN(delta)) return;
-  pushUndo();
-  S.players[idx].score += delta;
-  save();
-  render();
-}
-
-function advanceRound(dir) {
-  pushUndo();
-  const maxWinds = S.rules.gameType === 'hanchan' ? 2 : 1;
-  const pc = S.playerCount;
-  if (dir > 0) {
-    if (S.game.roundNum < pc) {
-      S.game.roundNum++;
-    } else if (S.game.windIdx < maxWinds - 1) {
-      S.game.windIdx++;
-      S.game.roundNum = 1;
-    }
-  } else {
-    if (S.game.roundNum > 1) {
-      S.game.roundNum--;
-    } else if (S.game.windIdx > 0) {
-      S.game.windIdx--;
-      S.game.roundNum = pc;
-    }
+  if(type==='ryukyoku'){
+    const tc=tenpaiFlags.filter(Boolean).length;
+    if(tc===0||tc===playerCount)return deltas;
+    const ntc=playerCount-tc;
+    const gain=Math.floor(3000/tc);
+    const pay=Math.floor(3000/ntc);
+    for(let i=0;i<playerCount;i++)deltas[i]=tenpaiFlags[i]?gain:-pay;
+    return deltas;
   }
-  save();
-  render();
+
+  if(type==='chonbo'){
+    const isDlr=winnerIdx===dealerIdx;
+    const pay=isDlr?12000:8000;
+    for(let i=0;i<playerCount;i++)if(i!==winnerIdx){deltas[i]+=pay;deltas[winnerIdx]-=pay;}
+    return deltas;
+  }
+
+  const base=getBase(han,fu,manganLevel);
+  const isWinnerDealer=winnerIdx===dealerIdx;
+
+  if(type==='tsumo'){
+    if(isWinnerDealer){
+      const each=roundUp100(base*2)+honba*100;
+      for(let i=0;i<playerCount;i++)if(i!==winnerIdx){deltas[i]-=each;deltas[winnerIdx]+=each;}
+    }else{
+      for(let i=0;i<playerCount;i++){
+        if(i===winnerIdx)continue;
+        const amt=(i===dealerIdx?roundUp100(base*2):roundUp100(base))+honba*100;
+        deltas[i]-=amt;deltas[winnerIdx]+=amt;
+      }
+    }
+    deltas[winnerIdx]+=riichiSticks*1000;
+  }else{// ron
+    const ronBase=isWinnerDealer?roundUp100(base*6):roundUp100(base*4);
+    const total=ronBase+honba*300;
+    deltas[discarderIdx]-=total;
+    deltas[winnerIdx]+=total+riichiSticks*1000;
+  }
+  return deltas;
 }
 
-/* ──────────────────────────────────────────────────────
-   Game lifecycle
-────────────────────────────────────────────────────── */
-function startGame() {
-  // Read current form values
-  document.querySelectorAll('[data-field]').forEach(el => {
-    const key = el.dataset.field;
-    if (key === 'name') {
-      const i = parseInt(el.dataset.i);
-      S.players[i].name = el.value.trim() || SEAT_LABELS[i];
-    } else if (key === 'startPoints' || key === 'returnPoints' || key === 'oka') {
-      const v = parseInt(el.value, 10);
-      if (!isNaN(v)) S.rules[key] = v;
-    } else if (key === 'uma4raw') {
-      S.rules.uma4raw = el.value;
-      S.rules.uma4 = parseUma(el.value);
-    } else if (key === 'uma3raw') {
-      S.rules.uma3raw = el.value;
-      S.rules.uma3 = parseUma(el.value);
+// Preview payment breakdown for display
+function previewPayments(hi){
+  const {type,winnerIdx,discarderIdx,han,fu,manganLevel,playerCount,dealerIdx,honba,riichiSticks}=hi;
+  if(type==='ryukyoku'||type==='chonbo')return null;
+  const base=getBase(han,fu,manganLevel);
+  const isWinnerDealer=winnerIdx===dealerIdx;
+  const rows=[];
+
+  if(type==='tsumo'){
+    if(isWinnerDealer){
+      const each=roundUp100(base*2);
+      rows.push({label:'各プレイヤー支払',amount:`-${fmt(each+honba*100)}`});
+      const total=each*(playerCount-1)+honba*100*(playerCount-1)+riichiSticks*1000;
+      rows.push({label:`${S.players[winnerIdx]?.name||''}受取`,amount:`+${fmt(total)}`,pos:true});
+    }else{
+      const dlrPay=roundUp100(base*2);const othPay=roundUp100(base);
+      rows.push({label:'親の支払',amount:`-${fmt(dlrPay+honba*100)}`});
+      rows.push({label:'子の支払',amount:`-${fmt(othPay+honba*100)}`});
+      const total=dlrPay+(playerCount-2)*othPay+honba*100*(playerCount-1)+riichiSticks*1000;
+      rows.push({label:`${S.players[winnerIdx]?.name||''}受取`,amount:`+${fmt(total)}`,pos:true});
+    }
+  }else{
+    const ronBase=isWinnerDealer?roundUp100(base*6):roundUp100(base*4);
+    const total=ronBase+honba*300;
+    rows.push({label:`${S.players[discarderIdx]?.name||''}支払`,amount:`-${fmt(total)}`});
+    rows.push({label:`${S.players[winnerIdx]?.name||''}受取`,amount:`+${fmt(total+riichiSticks*1000)}`,pos:true});
+  }
+  if(riichiSticks>0)rows.push({label:`供託 ×${riichiSticks}`,amount:`+${fmt(riichiSticks*1000)}`,pos:true});
+  if(honba>0)rows.push({label:`${honba}本場ボーナス`,amount:`+${fmt(honba*(type==='ron'?300:100)*(playerCount-1))}`});
+  return rows;
+}
+
+/* =====================================================================
+   GAME LOGIC
+===================================================================== */
+function pushUndo(){
+  S.undoStack.push({
+    players:S.players.map(p=>({...p})),
+    game:{...S.game,riichiFlags:[...S.game.riichiFlags]},
+  });
+  if(S.undoStack.length>20)S.undoStack.shift();
+}
+
+function undo(){
+  if(!S.undoStack.length)return;
+  const snap=S.undoStack.pop();
+  S.players=snap.players;S.game=snap.game;
+  S.bustPlayerIdx=-1;
+  saveSession();render();
+}
+
+function getSeatWind(playerIdx,dealerIdx,playerCount){
+  return(playerIdx-dealerIdx+playerCount)%playerCount;
+}
+
+function getRoundLabel(){
+  const{windIdx,roundNum}=S.game;
+  const maxW=S.rules.gameType==='hanchan'?2:1;
+  const isLast=windIdx===maxW-1&&roundNum===S.playerCount;
+  return`${WINDS[windIdx]}${roundNum}局${isLast?'（オーラス）':''}`;
+}
+
+function isGameOver(){
+  const{windIdx,roundNum}=S.game;
+  const maxW=S.rules.gameType==='hanchan'?2:1;
+  return windIdx>=maxW-1&&roundNum>=S.playerCount;
+}
+
+function advanceAfterWin(winnerIsDealer){
+  if(winnerIsDealer){
+    // renchan
+    S.game.honba++;
+    S.game.riichiSticks=0;
+    S.game.riichiFlags=new Array(S.playerCount).fill(false);
+  }else{
+    S.game.honba=0;
+    S.game.riichiSticks=0;
+    S.game.riichiFlags=new Array(S.playerCount).fill(false);
+    advanceRound();
+  }
+}
+
+function advanceAfterRyukyoku(dealerTenpai){
+  S.game.honba++;
+  S.game.riichiFlags=new Array(S.playerCount).fill(false);
+  if(!dealerTenpai)advanceRound();
+}
+
+function advanceRound(){
+  const maxW=S.rules.gameType==='hanchan'?2:1;
+  S.game.dealerIdx=(S.game.dealerIdx+1)%S.playerCount;
+  if(S.game.roundNum<S.playerCount){S.game.roundNum++;}
+  else if(S.game.windIdx<maxW-1){S.game.windIdx++;S.game.roundNum=1;}
+}
+
+function declareRiichi(idx){
+  if(S.players[idx].score<1000)return;
+  if(S.game.riichiFlags[idx])return;
+  pushUndo();
+  S.players[idx].score-=1000;
+  S.players[idx].riichiPaid=true;
+  S.game.riichiFlags[idx]=true;
+  S.game.riichiSticks++;
+  checkBust(idx);
+  saveSession();render();
+}
+
+function checkBust(idx){
+  if(S.players[idx].score<0){
+    S.bustPlayerIdx=idx;
+  }
+}
+
+function applyHandResult(hi){
+  pushUndo();
+  const deltas=calcHandDeltas(hi);
+  deltas.forEach((d,i)=>{if(i<S.playerCount)S.players[i].score+=d;});
+  // Clear riichi flags of those who won
+  if(hi.type!=='ryukyoku'&&hi.type!=='chonbo'){
+    S.game.riichiFlags[hi.winnerIdx]=false;
+  }
+  // Check bust
+  S.players.slice(0,S.playerCount).forEach((_,i)=>checkBust(i));
+
+  // Update stats
+  updateStats(hi,deltas);
+
+  // Add to hand history
+  S.handHistory.push({
+    round:getRoundLabel(),honba:S.game.honba,
+    type:hi.type,winnerIdx:hi.winnerIdx,discarderIdx:hi.discarderIdx,
+    label:hi.type==='ryukyoku'?'流局':hi.type==='chonbo'?'チョンボ':getHandLabel(hi.han,hi.fu,hi.manganLevel),
+    deltas:[...deltas],
+  });
+
+  // Auto-advance round
+  if(hi.type==='ryukyoku'){
+    const dealerTenpai=hi.tenpaiFlags?.[S.game.dealerIdx]||false;
+    advanceAfterRyukyoku(dealerTenpai);
+  }else if(hi.type!=='chonbo'){
+    const winnerIsDealer=hi.winnerIdx===S.game.dealerIdx;
+    advanceAfterWin(winnerIsDealer);
+  }
+
+  S.handInput=null;
+  saveSession();render();
+}
+
+function updateStats(hi,deltas){
+  const pc=S.playerCount;
+  if(hi.type==='ryukyoku'||hi.type==='chonbo')return;
+  // Determine ranks for this hand
+  S.players.slice(0,pc).forEach((p,i)=>{
+    const pid=p.id;if(!REG[pid])return;
+    REG[pid].stats.hands++;
+    if(i===hi.winnerIdx){
+      REG[pid].stats.wins++;
+      if(hi.type==='tsumo')REG[pid].stats.tsumo++;
+      else REG[pid].stats.ron++;
+      if(hi.isOpenHand)REG[pid].stats.openHands++;
+    }
+    if(hi.type==='ron'&&i===hi.discarderIdx)REG[pid].stats.dealIns++;
+    if(S.game.riichiFlags[i])REG[pid].stats.riichi++;
+  });
+  saveReg();
+}
+
+function endGame(){
+  const results=calcResults();
+  // Update totals and registry stats
+  results.forEach(r=>{
+    S.players[r.idx].total+=r.total;
+    const pid=S.players[r.idx].id;
+    if(REG[pid]){
+      REG[pid].stats.games++;
+      REG[pid].stats.rank[r.rank-1]++;
+      REG[pid].stats.totalPts+=r.total;
     }
   });
-  // Ensure uma arrays are valid
-  if (!S.rules.uma4 || S.rules.uma4.length !== 4) S.rules.uma4 = [20,10,-10,-20];
-  if (!S.rules.uma3 || S.rules.uma3.length !== 3) S.rules.uma3 = [15,0,-15];
-
-  S.players.slice(0, S.playerCount).forEach(p => { p.score = S.rules.startPoints; });
-  S.game = {windIdx:0, roundNum:1, honba:0, riichiSticks:0};
-  S.undoStack = [];
-  S.modal = null;
-  S.screen = 'game';
-  save();
-  render();
-}
-
-function calcResults() {
-  const uma = getUma();
-  const ret = S.rules.returnPoints;
-  const ranks = getRanks();
-  return S.players.slice(0, S.playerCount).map((p, i) => {
-    const rank = ranks[i];
-    const umaVal = uma[rank - 1] ?? 0;
-    const rawPts = Math.round((p.score - ret) / 1000);
-    const okaVal = S.rules.okaEnabled && rank === 1 ? S.rules.oka : 0;
-    return {idx:i, name:p.name, score:p.score, rank, uma:umaVal, oka:okaVal, rawPts, total: rawPts + umaVal + okaVal};
-  });
-}
-
-function endGame() {
-  const results = calcResults();
-  results.forEach(r => { S.players[r.idx].total += r.total; });
+  saveReg();
   S.gameHistory.push({
-    date: new Date().toLocaleString('ja-JP', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}),
-    gameType: S.rules.gameType,
-    gameNum: S.gameCount + 1,
-    results: results.map(r => ({...r})),
+    date:new Date().toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}),
+    gameType:S.rules.gameType,gameNum:S.gameCount+1,
+    results:results.map(r=>({...r})),
   });
   S.gameCount++;
-  S.screen = 'result';
-  S.undoStack = [];
-  save();
-  render();
+  stopTimer();S.game.timerRunning=false;
+  S.screen='result';
+  saveSession();render();
 }
 
-function nextGame() {
-  S.players.slice(0, S.playerCount).forEach(p => { p.score = S.rules.startPoints; });
-  S.game = {windIdx:0, roundNum:1, honba:0, riichiSticks:0};
-  S.undoStack = [];
-  S.modal = null;
-  S.screen = 'game';
-  save();
-  render();
-}
-
-function resetAll() {
-  if (!confirm('全データをリセットしますか？\n対局履歴と累計収支がすべて消去されます。')) return;
-  const newS = defaultState();
-  newS.playerCount = S.playerCount;
-  newS.players = S.players.map((p, i) => ({name:p.name, score:S.rules.startPoints, total:0}));
-  newS.rules = {...S.rules};
-  S = newS;
-  save();
-  render();
-}
-
-/* ──────────────────────────────────────────────────────
-   CSV Export
-────────────────────────────────────────────────────── */
-function exportCSV() {
-  if (!S.gameHistory.length) return;
-  const rows = [['対局番号','日時','種別','プレイヤー','最終点数','順位','素点','ウマ','オカ','収支','累計収支']];
-  const running = {};
-  S.players.slice(0, S.playerCount).forEach(p => { running[p.name] = 0; });
-
-  S.gameHistory.forEach(g => {
-    g.results.forEach(r => {
-      running[r.name] = (running[r.name] || 0) + r.total;
-      rows.push([g.gameNum, g.date, g.gameType==='hanchan'?'半荘':'東風',
-        r.name, r.score, r.rank, r.rawPts, r.uma, r.oka, r.total, running[r.name]]);
-    });
+function calcResults(){
+  const uma=S.playerCount===4?S.rules.uma4:S.rules.uma3;
+  const ret=S.rules.returnPoints;
+  const ranks=getRanks();
+  return S.players.slice(0,S.playerCount).map((p,i)=>{
+    const rank=ranks[i];
+    const umaVal=uma[rank-1]??0;
+    const rawPts=Math.round((p.score-ret)/1000);
+    const okaVal=S.rules.okaEnabled&&rank===1?S.rules.oka:0;
+    return{idx:i,name:p.name,score:p.score,rank,uma:umaVal,oka:okaVal,rawPts,total:rawPts+umaVal+okaVal};
   });
-
-  const csv = '﻿' + rows.map(r => r.join(',')).join('\r\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `mahjong_${new Date().toISOString().slice(0,10)}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
 }
 
-/* ──────────────────────────────────────────────────────
-   Render: Setup
-────────────────────────────────────────────────────── */
-function renderSetup() {
-  const {playerCount:pc, rules:r, players} = S;
-  const nameFields = [0,1,2,3].map(i => `
-    <div ${i===3&&pc===3?'style="display:none"':''} data-name-slot="${i}">
-      <div class="field">
-        <label class="lbl">${SEAT_LABELS[i]}</label>
-        <input class="inp" type="text" data-field="name" data-i="${i}"
-          value="${esc(players[i]?.name || SEAT_LABELS[i])}" placeholder="${SEAT_LABELS[i]}" maxlength="10">
-      </div>
-    </div>
-  `).join('');
+function getRanks(){
+  return S.players.slice(0,S.playerCount).map((p,i)=>{
+    const better=S.players.slice(0,S.playerCount).filter((q,j)=>q.score>p.score||(q.score===p.score&&j<i)).length;
+    return better+1;
+  });
+}
 
-  const hasHistory = S.gameHistory.length > 0;
+function nextGame(){
+  S.players.slice(0,S.playerCount).forEach(p=>{p.score=S.rules.startPoints;p.riichiPaid=false;});
+  S.game={windIdx:0,roundNum:1,honba:0,riichiSticks:0,dealerIdx:0,riichiFlags:new Array(S.playerCount).fill(false),timerSec:0,timerRunning:true};
+  S.undoStack=[];S.handInput=null;S.bustPlayerIdx=-1;
+  S.screen='game';
+  startTimer();
+  saveSession();render();
+}
 
-  return `
+function startGame(){
+  // Read form values
+  document.querySelectorAll('[data-field]').forEach(el=>{
+    const k=el.dataset.field;
+    if(k==='startPoints'||k==='returnPoints'||k==='oka'){const v=parseInt(el.value,10);if(!isNaN(v))S.rules[k]=v;}
+    else if(k==='uma4raw'){S.rules.uma4raw=el.value;S.rules.uma4=parseUma(el.value)||[20,10,-10,-20];}
+    else if(k==='uma3raw'){S.rules.uma3raw=el.value;S.rules.uma3=parseUma(el.value)||[15,0,-15];}
+  });
+  S.players=S.selectedIds.slice(0,S.playerCount).map(id=>({
+    id,name:REG[id]?.name||'?',score:S.rules.startPoints,total:0,riichiPaid:false,
+  }));
+  S.game={windIdx:0,roundNum:1,honba:0,riichiSticks:0,dealerIdx:0,riichiFlags:new Array(S.playerCount).fill(false),timerSec:0,timerRunning:true};
+  S.undoStack=[];S.handInput=null;S.bustPlayerIdx=-1;S.gameCount=0;S.gameHistory=[];S.handHistory=[];
+  S.screen='game';
+  startTimer();
+  saveSession();render();
+}
+
+function parseUma(raw){return(raw||'').split(',').map(v=>parseInt(v.trim(),10)).filter(v=>!isNaN(v));}
+
+/* =====================================================================
+   UTILITIES
+===================================================================== */
+function fmt(n){return n.toLocaleString('ja-JP');}
+function fmtPt(n){return(n>0?'+':'')+n;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function deltaClass(n){return n>0?'pos':n<0?'neg':'muted';}
+
+/* =====================================================================
+   RENDER: HOME
+===================================================================== */
+function renderHome(){
+  const ids=Object.keys(REG);
+  const canStart=S.selectedIds.length>=3;
+
+  const playerList=ids.length===0
+    ?'<div class="empty">プレイヤーを追加してゲームを開始</div>'
+    :ids.map(id=>{
+      const p=REG[id];
+      const seatIdx=S.selectedIds.indexOf(id);
+      const sel=seatIdx>=0;
+      const games=p.stats.games||0;
+      const wins=p.stats.wins||0;
+      const rate=games>0?Math.round(wins/p.stats.hands*100):0;
+      const avg=games>0?(p.stats.rank.reduce((s,c,i)=>s+c*(i+1),0)/games).toFixed(2):'-';
+      return`<div class="player-item">
+        <div class="player-avatar">${esc(p.name[0]||'?')}</div>
+        <div class="player-info">
+          <div class="player-name-reg">${esc(p.name)}</div>
+          <div class="player-stats-reg">${games}戦 勝率${rate}% 平均${avg}位 累計${fmtPt(p.stats.totalPts||0)}</div>
+        </div>
+        <button class="player-select-dot ${sel?'sel':''}" data-act="togglePlayer" data-id="${id}">
+          ${sel?`<span style="font-weight:900;color:#000">${seatIdx+1}</span>`:''}
+        </button>
+        <button class="hdr-btn" style="font-size:11px;padding:4px 8px" data-act="deletePlayer" data-id="${id}">削除</button>
+      </div>`;
+    }).join('');
+
+  const seatOrder=S.selectedIds.length>0
+    ?`<div class="sec"><div class="sec-lbl">座席順（タップして追加）</div>
+        <div class="card" style="display:flex;gap:8px;flex-wrap:wrap;padding:10px">
+          ${S.selectedIds.map((id,i)=>`
+            <div style="display:flex;align-items:center;gap:6px">
+              <div class="seat-order">${i+1}</div>
+              <span style="font-size:14px;font-weight:600">${esc(REG[id]?.name||'?')}</span>
+              <button style="background:none;border:none;color:var(--danger);font-size:16px;cursor:pointer" data-act="removeSeat" data-i="${i}">×</button>
+            </div>`).join('')}
+        </div></div>`:'';
+
+  const resumeBtn=S.screen!=='home'||S.players.length>0
+    ?`<button class="btn btn-secondary mt8" data-act="resumeGame">途中の対局を再開</button>`:'';
+
+  return`
 <div class="hdr">
   <div style="width:52px"></div>
   <div class="hdr-title">🀄 麻雀点棒管理</div>
-  <button class="hdr-btn" data-act="toHistory" ${!hasHistory?'style="opacity:.3;pointer-events:none"':''}>履歴</button>
+  <button class="hdr-btn" data-act="toHistory">履歴</button>
 </div>
 <div class="body">
-
 <div class="sec">
-  <div class="sec-label">人数</div>
+  <div class="sec-lbl">プレイヤー人数</div>
   <div class="tgl">
-    <button class="tgl-btn ${pc===3?'on':''}" data-act="setPC" data-v="3">三人打ち</button>
-    <button class="tgl-btn ${pc===4?'on':''}" data-act="setPC" data-v="4">四人打ち</button>
+    <button class="tgl-btn ${S.playerCount===3?'on':''}" data-act="setPC" data-v="3">三人打ち</button>
+    <button class="tgl-btn ${S.playerCount===4?'on':''}" data-act="setPC" data-v="4">四人打ち</button>
   </div>
 </div>
-
 <div class="sec">
-  <div class="sec-label">プレイヤー名</div>
-  <div class="card">
-    <div class="name-grid">${nameFields}</div>
+  <div class="sec-lbl">プレイヤー登録 <span style="color:var(--muted)">(${S.playerCount}人選択してください)</span></div>
+  <div class="card">${playerList}</div>
+  <div class="mt8 row">
+    <input class="inp" id="newPlayerName" placeholder="新しいプレイヤー名" style="flex:1">
+    <button class="btn btn-primary btn-sm" data-act="addPlayer" style="flex-shrink:0;width:auto">追加</button>
   </div>
 </div>
+${seatOrder}
+<div class="sec gap8">
+  <button class="btn btn-success" style="font-size:17px;padding:16px" data-act="toSetup" ${!canStart?'disabled':''}>
+    ルール設定へ →
+  </button>
+  ${S.players.length>0?resumeBtn:''}
+</div>
+</div>`;
+}
 
+/* =====================================================================
+   RENDER: SETUP
+===================================================================== */
+function renderSetup(){
+  const r=S.rules;const pc=S.playerCount;
+  return`
+<div class="hdr">
+  <button class="hdr-btn" data-act="toHome">← 戻る</button>
+  <div class="hdr-title">ルール設定</div>
+  <div style="width:52px"></div>
+</div>
+<div class="body">
 <div class="sec">
-  <div class="sec-label">ゲーム設定</div>
+  <div class="sec-lbl">戦型</div>
+  <div class="tgl">
+    <button class="tgl-btn ${r.gameType==='tonpuu'?'on':''}" data-act="setGameType" data-v="tonpuu">東風戦</button>
+    <button class="tgl-btn ${r.gameType==='hanchan'?'on':''}" data-act="setGameType" data-v="hanchan">半荘戦</button>
+  </div>
+</div>
+<div class="sec">
+  <div class="sec-lbl">点数設定</div>
   <div class="card">
-    <div class="field">
-      <label class="lbl">戦型</label>
-      <div class="tgl">
-        <button class="tgl-btn ${r.gameType==='tonpuu'?'on':''}" data-act="setGameType" data-v="tonpuu">東風戦</button>
-        <button class="tgl-btn ${r.gameType==='hanchan'?'on':''}" data-act="setGameType" data-v="hanchan">半荘戦</button>
-      </div>
-    </div>
     <div class="field">
       <label class="lbl">開始点数</label>
-      <input class="inp" type="number" data-field="startPoints" value="${r.startPoints}" step="1000" min="0">
+      <input class="inp" type="number" data-field="startPoints" value="${r.startPoints}" step="1000">
     </div>
     <div class="field">
       <label class="lbl">返し点（精算基準点）</label>
-      <input class="inp" type="number" data-field="returnPoints" value="${r.returnPoints}" step="1000" min="0">
+      <input class="inp" type="number" data-field="returnPoints" value="${r.returnPoints}" step="1000">
     </div>
   </div>
 </div>
-
 <div class="sec">
-  <div class="sec-label">ウマ設定</div>
+  <div class="sec-lbl">ウマ</div>
   <div class="card">
-    <div class="field" ${pc===3?'style="display:none"':''} data-uma-slot="4">
-      <label class="lbl">四人打ちウマ（1〜4位、カンマ区切り）</label>
+    <div class="field" ${pc===3?'style="display:none"':''}>
+      <label class="lbl">四人打ち（1〜4位、カンマ区切り）</label>
       <input class="inp" type="text" data-field="uma4raw" value="${esc(r.uma4raw)}" placeholder="20,10,-10,-20">
     </div>
-    <div class="field" ${pc===4?'style="display:none"':''} data-uma-slot="3">
-      <label class="lbl">三人打ちウマ（1〜3位、カンマ区切り）</label>
+    <div class="field" ${pc===4?'style="display:none"':''}>
+      <label class="lbl">三人打ち（1〜3位、カンマ区切り）</label>
       <input class="inp" type="text" data-field="uma3raw" value="${esc(r.uma3raw)}" placeholder="15,0,-15">
     </div>
   </div>
 </div>
-
 <div class="sec">
-  <div class="sec-label">オカ設定</div>
+  <div class="sec-lbl">オカ</div>
   <div class="card">
     <div class="field">
-      <label class="lbl">オカ</label>
       <div class="tgl">
         <button class="tgl-btn ${r.okaEnabled?'on':''}" data-act="setOka" data-v="1">あり</button>
         <button class="tgl-btn ${!r.okaEnabled?'on':''}" data-act="setOka" data-v="0">なし</button>
       </div>
     </div>
-    <div ${!r.okaEnabled?'style="display:none"':''} data-oka-amount>
-      <div class="field">
-        <label class="lbl">1位加算点数（1000点単位）</label>
-        <input class="inp" type="number" data-field="oka" value="${r.oka}" min="0">
-      </div>
-    </div>
+    ${r.okaEnabled?`<div class="field"><label class="lbl">オカ点数（1000点単位）</label><input class="inp" type="number" data-field="oka" value="${r.oka}"></div>`:''}
   </div>
 </div>
-
 <div class="sec">
-  <button class="btn btn-success" style="font-size:18px;padding:16px" data-act="startGame">
-    対局開始
-  </button>
-  ${hasHistory ? `
-  <div class="mt8">
-    <button class="btn btn-secondary" data-act="resumeGame">
-      対局を再開する
-    </button>
-  </div>
-  ` : ''}
+  <button class="btn btn-success" style="font-size:18px;padding:16px" data-act="startGame">対局開始</button>
 </div>
-
 </div>`;
 }
 
-/* ──────────────────────────────────────────────────────
-   Render: Game
-────────────────────────────────────────────────────── */
-function renderGame() {
-  const ranks = getRanks();
-  const pc = S.playerCount;
-  const g = S.game;
-  const startPts = S.rules.startPoints;
+/* =====================================================================
+   RENDER: GAME (TABLE VIEW)
+===================================================================== */
+function renderGame(){
+  const pc=S.playerCount;const g=S.game;const ranks=getRanks();
 
-  const rankClass = r => ['','r1','r2','r3','r4'][r];
-  const rbClass = r => ['','rb1','rb2','rb3','rb4'][r];
-  const rankLabel = r => ['','1位','2位','3位','4位'][r];
+  function pnl(idx,rotation){
+    const p=S.players[idx];
+    const seatWind=getSeatWind(idx,g.dealerIdx,pc);
+    const isDealer=idx===g.dealerIdx;
+    const isRiichi=g.riichiFlags[idx];
+    const delta=p.score-S.rules.startPoints;
+    let cls='pnl';
+    if(isDealer)cls+=' dealer';
+    if(isRiichi)cls+=' riichi-on';
+    const rank=ranks[idx];
+    const rankColors=['','#f1c40f','#95a5a6','#c0773a','#6e8a9e'];
 
-  const pcards = S.players.slice(0, pc).map((p, i) => {
-    const rank = ranks[i];
-    const delta = p.score - startPts;
-    return `
-<div class="pcard ${rankClass(rank)}">
-  <div class="pcard-top">
-    <div>
-      <span class="pcard-name">${esc(p.name)}</span>
-      <span class="pcard-seat">${SEAT_LABELS[i]}</span>
-    </div>
-    <span class="rank-badge ${rbClass(rank)}">${rankLabel(rank)}</span>
+    const inner=`<div class="${cls}" data-act="tapPlayer" data-i="${idx}" style="border-color:${isRiichi?'var(--riichi)':isDealer?'var(--warn)':''};min-width:150px">
+      <div class="pnl-row1">
+        <span class="pnl-wind">${WINDS[seatWind]}</span>
+        ${isDealer?'<span class="pnl-dealer-mark">親</span>':''}
+        <span class="pnl-name">${esc(p.name)}</span>
+        <span style="margin-left:auto;font-size:11px;font-weight:800;color:${rankColors[rank]}">${rank}位</span>
+        ${isRiichi?'<span class="pnl-riichi-icon">🎴</span>':''}
+      </div>
+      <div class="pnl-score" style="color:${isRiichi?'var(--riichi)':'var(--text)'}">${fmt(p.score)}</div>
+      <div class="pnl-meta"><span class="${deltaClass(delta)}">${delta>=0?'+':''}${fmt(delta)}</span> 累計:<span class="${deltaClass(p.total)}">${fmtPt(p.total)}</span></div>
+    </div>`;
+    return`<div class="${rotation}">${inner}</div>`;
+  }
+
+  // 3-player: left slot empty
+  const leftSlot=pc===4?`<div class="slot-left">${pnl(3,'pnl-left-wrap')}</div>`:'<div class="slot-left"></div>';
+
+  const centerContent=`
+<div class="table-center">
+  <div class="tc-round">${getRoundLabel()}</div>
+  <div class="tc-row">
+    <div class="tc-item"><div class="tc-lbl">本場</div><div class="tc-val">${g.honba}</div></div>
+    <div class="tc-item"><div class="tc-lbl">供託</div><div class="tc-val">${g.riichiSticks}</div></div>
   </div>
-  <div class="pcard-score">${fmt(p.score)}</div>
-  <div class="pcard-meta">
-    <span class="${deltaColor(delta)}">${delta>=0?'+':''}${fmt(delta)}</span>
-    <span style="margin:0 6px;opacity:.4">·</span>
-    累計: <span class="${deltaColor(p.total)}">${fmtPt(p.total)}</span>
-  </div>
-  <div class="sbtns">
-    <button class="sbtn sbtn-m2" data-act="qs" data-i="${i}" data-d="-5000">−5k</button>
-    <button class="sbtn sbtn-m1" data-act="qs" data-i="${i}" data-d="-1000">−1k</button>
-    <button class="sbtn sbtn-edit" data-act="openEdit" data-i="${i}">✏️</button>
-    <button class="sbtn sbtn-p1" data-act="qs" data-i="${i}" data-d="1000">＋1k</button>
-    <button class="sbtn sbtn-p2" data-act="qs" data-i="${i}" data-d="5000">＋5k</button>
-  </div>
+  <div class="tc-timer" id="tc-timer">${fmtTimer(g.timerSec)}</div>
+  <button class="tc-btn" data-act="openHandInput">あがり入力</button>
+  <button class="tc-ref" data-act="showScoreTable">点数早見表</button>
 </div>`;
-  }).join('');
 
-  const total = S.players.slice(0, pc).reduce((s, p) => s + p.score, 0);
-  const expected = startPts * pc;
-  const diff = total - expected;
-  const diffStyle = diff === 0 ? 'color:var(--success)' : 'color:var(--danger)';
+  const riichiButtons=S.players.slice(0,pc).map((p,i)=>`
+<button class="btn btn-xs ${S.game.riichiFlags[i]?'btn-danger':'btn-secondary'}" data-act="riichi" data-i="${i}" style="flex:1;padding:10px 4px;font-size:12px">
+  ${S.game.riichiFlags[i]?'🎴リーチ中':'リーチ'}<br><span style="font-size:10px;opacity:.7">${esc(p.name)}</span>
+</button>`).join('');
 
-  return `
+  return`
 <div class="hdr">
-  <button class="hdr-btn" data-act="toSetup">設定</button>
+  <button class="hdr-btn" data-act="toHome">設定</button>
   <div class="hdr-title">第${S.gameCount+1}半荘</div>
   <button class="hdr-btn" data-act="toHistory">履歴</button>
 </div>
-<div class="body" style="padding-bottom:80px">
-
+<div class="body" style="padding-bottom:calc(140px + env(safe-area-inset-bottom))">
 <div class="sec">
-  <div class="round-bar">
-    <div class="round-cell">
-      <div class="round-cell-lbl">局</div>
-      <div class="round-cell-row">
-        <button class="adj-btn" data-act="adjRound" data-v="-1">◀</button>
-        <div class="round-cell-val" style="font-size:14px;min-width:80px">${getRoundLabel()}</div>
-        <button class="adj-btn" data-act="adjRound" data-v="1">▶</button>
-      </div>
-    </div>
-    <div class="round-sep"></div>
-    <div class="round-cell">
-      <div class="round-cell-lbl">本場</div>
-      <div class="round-cell-row">
-        <button class="adj-btn" data-act="adjHonba" data-v="-1">−</button>
-        <div class="round-cell-val">${g.honba}</div>
-        <button class="adj-btn" data-act="adjHonba" data-v="1">＋</button>
-      </div>
-    </div>
-    <div class="round-sep"></div>
-    <div class="round-cell">
-      <div class="round-cell-lbl">供託</div>
-      <div class="round-cell-row">
-        <button class="adj-btn" data-act="adjRiichi" data-v="-1">−</button>
-        <div class="round-cell-val">${g.riichiSticks}</div>
-        <button class="adj-btn" data-act="adjRiichi" data-v="1">＋</button>
-      </div>
+  <div class="table-wrap">
+    <div class="table-inner">
+      <div class="slot-top">${pnl(2,'pnl-top-wrap')}</div>
+      ${leftSlot}
+      <div class="slot-center">${centerContent}</div>
+      <div class="slot-right">${pnl(1,'pnl-right-wrap')}</div>
+      <div class="slot-bottom">${pnl(0,'')}</div>
     </div>
   </div>
-  <div class="diff-hint" style="${diffStyle}">
-    ${diff === 0 ? '✓ 合計 ' + fmt(total) : '⚠ 差分 ' + fmtPt(diff) + '（合計 ' + fmt(total) + '）'}
-  </div>
+  <div style="display:flex;gap:5px;margin-top:8px">${riichiButtons}</div>
 </div>
-
-<div class="sec">${pcards}</div>
-
 </div>
-
 <div class="bnav">
   <button class="btn btn-secondary" data-act="undo" ${!S.undoStack.length?'disabled':''}>↩ Undo</button>
-  <button class="btn btn-secondary" data-act="nextRound">次の局 →</button>
+  <button class="btn btn-secondary" data-act="manualAdvance">次の局 →</button>
   <button class="btn btn-danger" data-act="endGame">精算</button>
 </div>
-
-${renderModal()}`;
+${S.bustPlayerIdx>=0?renderBust():''}
+${S.showScoreTable?renderScoreTable():''}
+${S.handInput?renderHandInput():''}`;
 }
 
-/* ──────────────────────────────────────────────────────
-   Render: Modal
-────────────────────────────────────────────────────── */
-function renderModal() {
-  if (!S.modal) return '';
-  const p = S.players[S.modal.playerIdx];
+/* =====================================================================
+   RENDER: HAND INPUT WIZARD
+===================================================================== */
+function renderHandInput(){
+  const hi=S.handInput;const pc=S.playerCount;
+  const g=S.game;
 
-  const posVals = [100,500,1000,2000,3000,5000,8000,12000,16000,24000,32000,48000];
-  const negVals = posVals.map(v => -v);
+  function stepTypeSelect(){
+    return`
+<div class="hi-step-lbl">① あがりの種類を選択</div>
+<div class="type-grid">
+  <button class="type-btn ${hi.type==='tsumo'?'sel':''}" data-act="hiSetType" data-v="tsumo"><span class="type-icon">🀄</span>ツモ</button>
+  <button class="type-btn ${hi.type==='ron'?'sel':''}" data-act="hiSetType" data-v="ron"><span class="type-icon">🎴</span>ロン</button>
+  <button class="type-btn ${hi.type==='ryukyoku'?'sel':''}" data-act="hiSetType" data-v="ryukyoku"><span class="type-icon">🔄</span>流局</button>
+  <button class="type-btn ${hi.type==='chonbo'?'sel':''}" data-act="hiSetType" data-v="chonbo"><span class="type-icon">⚠️</span>チョンボ</button>
+</div>
+${hi.type?`<button class="btn btn-primary mt12" data-act="hiNext">次へ →</button>`:''}`;
+  }
 
-  const pBtns = posVals.map(v =>
-    `<button class="qbtn qbtn-p" data-act="qm" data-v="${v}">${v>=1000?'+'+(v/1000)+'k':'+'+v}</button>`
-  ).join('');
-  const mBtns = negVals.map(v =>
-    `<button class="qbtn qbtn-m" data-act="qm" data-v="${v}">${v<=-1000?(v/1000)+'k':v}</button>`
-  ).join('');
+  function playerBtns(selectedIdx,cls,checkMark){
+    return S.players.slice(0,pc).map((p,i)=>{
+      const sw=getSeatWind(i,g.dealerIdx,pc);
+      const sel=selectedIdx===i;
+      return`<button class="hi-player-btn ${sel?cls:''}" data-act="hiSelectPlayer" data-role="${cls}" data-i="${i}">
+        <span class="hi-player-wind">${WINDS[sw]}</span>
+        <span class="hi-player-name">${esc(p.name)}</span>
+        <span class="hi-player-score">${fmt(p.score)}</span>
+        <span class="hi-player-check">${sel?checkMark:''}</span>
+      </button>`;
+    }).join('');
+  }
 
-  return `
-<div class="overlay" data-act="closeModal">
-  <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sheet-name">${esc(p.name)}</div>
-    <div class="sheet-score">${fmt(p.score)}</div>
+  function stepWinner(){
+    return`
+<div class="hi-step-lbl">② あがったプレイヤー</div>
+<div class="hi-players">${playerBtns(hi.winnerIdx,'sel','✓')}</div>
+${hi.winnerIdx!=null?`<button class="btn btn-primary mt12" data-act="hiNext">次へ →</button>`:''}`;
+  }
 
-    <div class="sec-label">加算（プラス）</div>
-    <div class="qbtns" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">${pBtns}</div>
+  function stepDiscarder(){
+    return`
+<div class="hi-step-lbl">③ 放銃したプレイヤー</div>
+<div class="hi-players">${S.players.slice(0,pc).map((p,i)=>{
+  if(i===hi.winnerIdx)return`<button class="hi-player-btn disabled" disabled><span class="hi-player-wind">${WINDS[getSeatWind(i,g.dealerIdx,pc)]}</span><span class="hi-player-name">${esc(p.name)}（あがり）</span></button>`;
+  const sel=hi.discarderIdx===i;
+  return`<button class="hi-player-btn ${sel?'sel-secondary':''}" data-act="hiSelectDiscarder" data-i="${i}">
+    <span class="hi-player-wind">${WINDS[getSeatWind(i,g.dealerIdx,pc)]}</span>
+    <span class="hi-player-name">${esc(p.name)}</span>
+    <span class="hi-player-score">${fmt(p.score)}</span>
+    <span class="hi-player-check">${sel?'✓':''}</span>
+  </button>`;
+}).join('')}</div>
+${hi.discarderIdx!=null?`<button class="btn btn-primary mt12" data-act="hiNext">次へ →</button>`:''}`;
+  }
 
-    <div class="sec-label">減算（マイナス）</div>
-    <div class="qbtns" style="grid-template-columns:repeat(4,1fr);margin-bottom:4px">${mBtns}</div>
+  function stepPoints(){
+    const mgSel=hi.manganLevel;
+    const fuBtns=FU_LIST.map(f=>`<button class="fu-btn ${hi.fu===f&&!mgSel?'on':''}" data-act="hiFu" data-v="${f}">${f}</button>`).join('');
+    const mgBtns=MANGAN_LEVELS.map(l=>`<button class="mg-btn ${mgSel===l?'on':''}" data-act="hiMangan" data-v="${l}">${MANGAN_LABELS[l]}</button>`).join('');
 
-    <div class="custom-row">
-      <input class="inp" type="number" id="modalInp" placeholder="直接入力（例: 3900 / -2000）" style="flex:1">
-      <button class="btn btn-primary btn-sm" data-act="applyModal" style="flex-shrink:0;width:auto;padding:11px 18px">確定</button>
-    </div>
-    <button class="btn btn-secondary" style="margin-top:6px" data-act="closeModal">キャンセル</button>
+    const preview=previewPayments({...hi,playerCount:pc,dealerIdx:g.dealerIdx,honba:g.honba,riichiSticks:g.riichiSticks});
+    const prevHtml=preview?`<div class="preview-box">
+      <div class="preview-title">支払いプレビュー</div>
+      ${preview.map(r=>`<div class="preview-row"><span class="preview-name">${esc(r.label)}</span><span class="preview-amount ${r.pos?'preview-pos':'preview-neg'}">${r.amount}</span></div>`).join('')}
+    </div>`:'';
+
+    return`
+<div class="hi-step-lbl">${hi.type==='ron'?'④':'③'} 点数</div>
+<div style="margin-bottom:8px">
+  <div class="sec-lbl">翻数</div>
+  <div class="han-row">
+    <button class="han-adj" data-act="hiHan" data-v="-1">−</button>
+    <div class="han-val">${hi.han}</div>
+    <button class="han-adj" data-act="hiHan" data-v="1">＋</button>
   </div>
+  <div class="han-lbl">翻</div>
+</div>
+${mgSel?'':`<div class="sec-lbl">符数</div><div class="fu-grid">${fuBtns}</div>`}
+<div class="sec-lbl">または役満クラス</div>
+<div class="mangan-grid">${mgBtns}</div>
+<div class="field">
+  <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+    <input type="checkbox" id="hi-open" ${hi.isOpenHand?'checked':''} style="width:18px;height:18px">
+    <span style="font-size:14px">副露あり（統計用）</span>
+  </label>
+</div>
+${prevHtml}
+<button class="btn btn-primary" data-act="hiNext">確認へ →</button>`;
+  }
+
+  function stepTenpai(){
+    return`
+<div class="hi-step-lbl">② テンパイのプレイヤー（複数選択可）</div>
+<div class="hi-players">${S.players.slice(0,pc).map((p,i)=>{
+  const sel=hi.tenpaiFlags?.[i];
+  return`<button class="hi-player-btn ${sel?'sel':''}" data-act="hiToggleTenpai" data-i="${i}">
+    <span class="hi-player-wind">${WINDS[getSeatWind(i,g.dealerIdx,pc)]}</span>
+    <span class="hi-player-name">${esc(p.name)}</span>
+    <span class="hi-player-score">${fmt(p.score)}</span>
+    <span class="hi-player-check">${sel?'✓':''}</span>
+  </button>`;
+}).join('')}</div>
+<button class="btn btn-primary mt12" data-act="hiNext">確認へ →</button>`;
+  }
+
+  function stepChonbo(){
+    return`
+<div class="hi-step-lbl">② チョンボをしたプレイヤー</div>
+<div class="hi-players">${playerBtns(hi.winnerIdx,'sel','✓')}</div>
+${hi.winnerIdx!=null?`<button class="btn btn-primary mt12" data-act="hiNext">確認へ →</button>`:''}`;
+  }
+
+  function stepConfirm(){
+    const deltas=calcHandDeltas({...hi,playerCount:pc,dealerIdx:g.dealerIdx,honba:g.honba,riichiSticks:g.riichiSticks});
+    const typeLabel={tsumo:'ツモあがり',ron:'ロンあがり',ryukyoku:'流局',chonbo:'チョンボ'}[hi.type]||hi.type;
+    const handLbl=hi.type==='tsumo'||hi.type==='ron'?getHandLabel(hi.han,hi.fu,hi.manganLevel):'';
+
+    return`
+<div class="hi-step-lbl">確認</div>
+<div class="preview-box">
+  <div style="font-size:16px;font-weight:800;margin-bottom:12px">${typeLabel} ${handLbl?`（${handLbl}）`:''}</div>
+  ${S.players.slice(0,pc).map((p,i)=>`
+  <div class="preview-row">
+    <span class="preview-name">${esc(p.name)}<span style="font-size:11px;color:var(--muted);margin-left:4px">${fmt(p.score)}</span></span>
+    <span class="preview-amount ${deltas[i]>0?'preview-pos':deltas[i]<0?'preview-neg':''}">${deltas[i]===0?'±0':fmtPt(deltas[i])}</span>
+  </div>`).join('')}
+  ${g.honba>0?`<div style="font-size:11px;color:var(--muted);margin-top:6px">${g.honba}本場ボーナス含む</div>`:''}
+  ${g.riichiSticks>0?`<div style="font-size:11px;color:var(--muted)">供託 ${g.riichiSticks}本収得</div>`:''}
+</div>
+<button class="btn btn-success" style="font-size:17px;padding:16px;margin-bottom:10px" data-act="hiConfirm">確定して次の局へ</button>
+<button class="btn btn-secondary" data-act="hiBack">戻って修正</button>`;
+  }
+
+  let content='';
+  const step=hi.step;
+  if(step===1)content=stepTypeSelect();
+  else if(step===2&&hi.type==='ryukyoku')content=stepTenpai();
+  else if(step===2&&hi.type==='chonbo')content=stepChonbo();
+  else if(step===2)content=stepWinner();
+  else if(step===3&&hi.type==='ron')content=stepDiscarder();
+  else if(step===3)content=stepPoints();
+  else if(step===4&&hi.type==='ron')content=stepPoints();
+  else content=stepConfirm();
+
+  return`<div class="hi-overlay slide-up">
+<div class="hi-wrap">
+  <div class="hi-header">
+    <button class="hi-back" data-act="hiBack">← 戻る</button>
+    <div class="hi-title">あがり入力</div>
+  </div>
+  ${content}
+</div>
 </div>`;
 }
 
-/* ──────────────────────────────────────────────────────
-   Render: Result
-────────────────────────────────────────────────────── */
-function renderResult() {
-  const game = S.gameHistory[S.gameHistory.length - 1];
-  if (!game) { S.screen = 'setup'; return renderSetup(); }
+/* =====================================================================
+   RENDER: BUST ALERT
+===================================================================== */
+function renderBust(){
+  const name=S.players[S.bustPlayerIdx]?.name||'';
+  const score=S.players[S.bustPlayerIdx]?.score||0;
+  return`<div class="bust-overlay" data-act="closeBust">
+<div class="bust-box">
+  <div class="bust-title">飛び！</div>
+  <div class="bust-sub">${esc(name)} が ${fmt(score)} 点<br>（0点以下）</div>
+  <button class="btn btn-danger" style="margin-bottom:10px" data-act="endGame">対局終了</button>
+  <button class="btn btn-secondary" data-act="closeBust">続行</button>
+</div>
+</div>`;
+}
 
-  const sorted = [...game.results].sort((a,b) => a.rank - b.rank);
+/* =====================================================================
+   RENDER: SCORE TABLE
+===================================================================== */
+function renderScoreTable(){
+  // Non-dealer ron / dealer ron for each han/fu
+  const rows=FU_LIST.map(fu=>{
+    const cells=[1,2,3,4].map(han=>{
+      const base=Math.min(fu*Math.pow(2,han+2),2000);
+      const isMangan=base>=2000||(han>=5);
+      if(isMangan&&han<5)return`<td class="mangan" colspan="0">満貫</td>`;
+      const nr=roundUp100(base*4);
+      const dr=roundUp100(base*6);
+      return`<td>${fmt(nr)}<br><span class="dealer">${fmt(dr)}</span></td>`;
+    });
+    return`<tr><th>${fu}符</th>${cells.join('')}<td class="mangan">8000<br><span class="dealer">12000</span></td></tr>`;
+  });
 
-  const cards = sorted.map(r => {
-    const ptsClass = r.total >= 0 ? 'score-pos' : 'score-neg';
-    const breakdown = `${fmt(r.score)}点 ／ 素点${fmtPt(r.rawPts)} ウマ${fmtPt(r.uma)}${r.oka?` オカ＋${r.oka}`:''}`;
-    return `
+  return`<div class="modal-overlay" data-act="closeScoreTable">
+<div class="modal-sheet" onclick="event.stopPropagation()">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div style="font-size:17px;font-weight:800">点数早見表（ロン）</div>
+    <button class="hdr-btn" data-act="closeScoreTable">閉じる</button>
+  </div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:8px">上段: 非親ロン / <span class="dealer" style="color:var(--warn)">下段: 親ロン</span></div>
+  <div style="overflow-x:auto">
+  <table class="score-tbl">
+    <thead><tr><th>符\翻</th><th>1翻</th><th>2翻</th><th>3翻</th><th>4翻</th><th>5翻+</th></tr></thead>
+    <tbody>${rows.join('')}</tbody>
+  </table>
+  </div>
+  <div style="margin-top:16px">
+    <div style="font-size:13px;font-weight:700;margin-bottom:8px">ツモ（満貫）</div>
+    <div style="font-size:12px;color:var(--muted)">親ツモ: 4000オール<br>子ツモ: 親2000 子1000</div>
+    <div style="font-size:13px;font-weight:700;margin:8px 0">跳満</div>
+    <div style="font-size:12px;color:var(--muted)">ロン: 非親12000 / 親18000<br>子ツモ: 親3000 子1500 / 親ツモ: 6000オール</div>
+  </div>
+</div>
+</div>`;
+}
+
+/* =====================================================================
+   RENDER: RESULT
+===================================================================== */
+function renderResult(){
+  const game=S.gameHistory[S.gameHistory.length-1];
+  if(!game){S.screen='home';return renderHome();}
+  const sorted=[...game.results].sort((a,b)=>a.rank-b.rank);
+  const cards=sorted.map(r=>`
 <div class="result-card">
   <div class="result-rank">${RANK_ICONS[r.rank-1]}</div>
   <div class="result-body">
     <div class="result-name">${esc(r.name)}</div>
-    <div class="result-breakdown">${breakdown}</div>
+    <div class="result-detail">${fmt(r.score)}点 素${fmtPt(r.rawPts)} ウマ${fmtPt(r.uma)}${r.oka?` オカ+${r.oka}`:''}</div>
   </div>
-  <div class="result-pts ${ptsClass}">${fmtPt(r.total)}</div>
-</div>`;
-  }).join('');
-
-  const cumulRows = S.players.slice(0, S.playerCount)
-    .map(p => `
-<div class="cumul-row">
-  <span class="cumul-name">${esc(p.name)}</span>
-  <span class="cumul-total ${deltaColor(p.total)}">${fmtPt(p.total)}</span>
+  <div class="result-pts ${r.total>=0?'pos':'neg'}">${fmtPt(r.total)}</div>
 </div>`).join('');
 
-  return `
+  const cumul=S.players.slice(0,S.playerCount).map(p=>`
+<div class="cumul-row">
+  <span class="cumul-name">${esc(p.name)}</span>
+  <span class="cumul-total ${deltaClass(p.total)}">${fmtPt(p.total)}</span>
+</div>`).join('');
+
+  return`
 <div class="hdr">
   <div style="width:52px"></div>
   <div class="hdr-title">対局結果</div>
   <button class="hdr-btn" data-act="toHistory">履歴</button>
 </div>
 <div class="body">
-
-<div class="sec">
-  <div class="sec-label">第${game.gameNum}半荘 · ${game.gameType==='hanchan'?'半荘':'東風'}戦 · ${game.date}</div>
-  ${cards}
-</div>
-
-<div class="sec">
-  <div class="sec-label">累計収支</div>
-  <div class="cumul">${cumulRows}</div>
-</div>
-
+<div class="sec"><div class="sec-lbl">第${game.gameNum}半荘 · ${game.gameType==='hanchan'?'半荘':'東風'}戦 · ${game.date}</div>${cards}</div>
+<div class="sec"><div class="sec-lbl">累計収支</div><div class="cumul">${cumul}</div></div>
 <div class="sec gap8">
   <button class="btn btn-success" style="font-size:18px;padding:16px" data-act="nextGame">次の半荘へ →</button>
   <button class="btn btn-secondary" data-act="toHistory">対局履歴を見る</button>
-  <button class="btn btn-secondary" data-act="toSetup">ルール設定を変更</button>
+  <button class="btn btn-secondary" data-act="toHome">ホームに戻る</button>
 </div>
-
 </div>`;
 }
 
-/* ──────────────────────────────────────────────────────
-   Render: History
-────────────────────────────────────────────────────── */
-function renderHistory() {
-  const hasHistory = S.gameHistory.length > 0;
-
-  const cumulRows = S.players.slice(0, S.playerCount)
-    .map(p => `
+/* =====================================================================
+   RENDER: HISTORY
+===================================================================== */
+function renderHistory(){
+  const hasH=S.gameHistory.length>0;
+  const cumul=S.players.slice(0,S.playerCount).map(p=>`
 <div class="cumul-row">
   <span class="cumul-name">${esc(p.name)}</span>
-  <span class="cumul-total ${deltaColor(p.total)}">${fmtPt(p.total)}</span>
+  <span class="cumul-total ${deltaClass(p.total)}">${fmtPt(p.total)}</span>
 </div>`).join('');
 
-  const histItems = [...S.gameHistory].reverse().map(g => {
-    const sorted = [...g.results].sort((a,b) => a.rank - b.rank);
-    const cells = sorted.map(r => `
-<div class="hist-p">
-  <div class="hist-p-rank">${r.rank}位</div>
-  <div class="hist-p-name">${esc(r.name)}</div>
-  <div class="hist-p-pts ${deltaColor(r.total)}">${fmtPt(r.total)}</div>
-</div>`).join('');
-    return `
-<div class="hist-item">
-  <div class="hist-meta">第${g.gameNum}半荘 · ${g.gameType==='hanchan'?'半荘':'東風'}戦 · ${g.date}</div>
-  <div class="hist-players">${cells}</div>
-</div>`;
+  const items=[...S.gameHistory].reverse().map(g=>{
+    const sorted=[...g.results].sort((a,b)=>a.rank-b.rank);
+    return`<div class="hist-item">
+      <div class="hist-meta">第${g.gameNum}半荘 · ${g.gameType==='hanchan'?'半荘':'東風'}戦 · ${g.date}</div>
+      <div class="hist-players">${sorted.map(r=>`
+        <div class="hist-p">
+          <div class="hist-p-rank">${r.rank}位</div>
+          <div class="hist-p-name">${esc(r.name)}</div>
+          <div class="hist-p-pts ${deltaClass(r.total)}">${fmtPt(r.total)}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
   }).join('');
 
-  return `
+  // Player stats section
+  const statsSection=Object.values(REG).map(p=>{
+    const st=p.stats;
+    const wr=st.hands>0?Math.round(st.wins/st.hands*100):0;
+    const dr=st.hands>0?Math.round(st.dealIns/st.hands*100):0;
+    const fr=st.hands>0?Math.round(st.openHands/st.hands*100):0;
+    const avg=st.games>0?(st.rank.reduce((s,c,i)=>s+c*(i+1),0)/st.games).toFixed(2):'-';
+    return`<div class="hist-item">
+      <div style="font-size:15px;font-weight:700;margin-bottom:8px">${esc(p.name)}</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-val">${st.games}</div><div class="stat-lbl">対局数</div></div>
+        <div class="stat-card"><div class="stat-val ${deltaClass(st.totalPts)}">${fmtPt(st.totalPts||0)}</div><div class="stat-lbl">累計収支</div></div>
+        <div class="stat-card"><div class="stat-val">${wr}%</div><div class="stat-lbl">和了率</div></div>
+        <div class="stat-card"><div class="stat-val">${dr}%</div><div class="stat-lbl">放銃率</div></div>
+        <div class="stat-card"><div class="stat-val">${fr}%</div><div class="stat-lbl">副露率</div></div>
+        <div class="stat-card"><div class="stat-val">${avg}</div><div class="stat-lbl">平均順位</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px">${st.rank.map((c,i)=>`${i+1}位: ${c}回`).join(' ')}</div>
+    </div>`;
+  }).join('');
+
+  return`
 <div class="hdr">
   <button class="hdr-btn" data-act="backHistory">← 戻る</button>
-  <div class="hdr-title">対局履歴</div>
-  ${hasHistory ? `<button class="hdr-btn" data-act="exportCSV">CSV</button>` : '<div style="width:52px"></div>'}
+  <div class="hdr-title">履歴・成績</div>
+  ${hasH?`<button class="hdr-btn" data-act="exportCSV">CSV</button>`:'<div style="width:52px"></div>'}
 </div>
 <div class="body">
-
-<div class="sec">
-  <div class="sec-label">累計収支（${S.gameCount}半荘）</div>
-  <div class="cumul">${cumulRows}</div>
-</div>
-
-${hasHistory ? `
-<div class="sec">
-  <div class="sec-label">対局一覧</div>
-  ${histItems}
-</div>
-<div class="sec gap8">
-  <button class="btn btn-secondary" data-act="exportCSV">📊 CSVでダウンロード</button>
-</div>
-` : '<div class="empty">まだ対局履歴がありません</div>'}
-
-<div class="sec">
-  <div class="danger-zone">
-    <div class="sec-label" style="margin-bottom:8px">データ管理</div>
-    <button class="btn btn-danger" style="font-size:13px;padding:11px" data-act="resetAll">
-      全データをリセット
-    </button>
-  </div>
-</div>
-
+${S.players.length>0?`<div class="sec"><div class="sec-lbl">今セッション累計</div><div class="cumul">${cumul}</div></div>`:''}
+${Object.keys(REG).length>0?`<div class="sec"><div class="sec-lbl">プレイヤー成績</div>${statsSection}</div>`:''}
+${hasH?`<div class="sec"><div class="sec-lbl">対局一覧</div>${items}</div>`:'<div class="empty">対局履歴がありません</div>'}
+${hasH?`<div class="sec"><button class="btn btn-secondary" data-act="exportCSV">📊 CSVでダウンロード</button></div>`:''}
+<div class="sec"><div class="danger-zone"><div class="sec-lbl" style="margin-bottom:8px">データ管理</div><button class="btn btn-danger" style="font-size:13px;padding:11px" data-act="resetAll">全データをリセット</button></div></div>
 </div>`;
 }
 
-/* ──────────────────────────────────────────────────────
-   Render entry point
-────────────────────────────────────────────────────── */
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function render() {
-  const app = document.getElementById('app');
-  switch (S.screen) {
-    case 'setup':   app.innerHTML = renderSetup();   break;
-    case 'game':    app.innerHTML = renderGame();    break;
-    case 'result':  app.innerHTML = renderResult();  break;
-    case 'history': app.innerHTML = renderHistory(); break;
-    default:        app.innerHTML = renderSetup();
-  }
-  // Focus modal input if open
-  const mi = document.getElementById('modalInp');
-  if (mi) {
-    mi.focus();
-    mi.addEventListener('keydown', e => {
-      if (e.key === 'Enter') document.querySelector('[data-act="applyModal"]')?.click();
+/* =====================================================================
+   CSV EXPORT
+===================================================================== */
+function exportCSV(){
+  if(!S.gameHistory.length)return;
+  const rows=[['対局番号','日時','種別','プレイヤー','最終点数','順位','素点','ウマ','オカ','収支','累計']];
+  const run={};S.players.slice(0,S.playerCount).forEach(p=>{run[p.name]=0;});
+  S.gameHistory.forEach(g=>{
+    g.results.forEach(r=>{
+      run[r.name]=(run[r.name]||0)+r.total;
+      rows.push([g.gameNum,g.date,g.gameType==='hanchan'?'半荘':'東風',r.name,r.score,r.rank,r.rawPts,r.uma,r.oka,r.total,run[r.name]]);
     });
-  }
-}
-
-/* ──────────────────────────────────────────────────────
-   Event handling
-────────────────────────────────────────────────────── */
-document.addEventListener('click', e => {
-  const el = e.target.closest('[data-act]');
-  if (!el) return;
-  const act = el.dataset.act;
-
-  switch (act) {
-
-    case 'setPC': {
-      const v = parseInt(el.dataset.v);
-      S.playerCount = v;
-      // Ensure 4 player slots exist
-      while (S.players.length < 4) {
-        S.players.push({name:SEAT_LABELS[S.players.length], score:S.rules.startPoints, total:0});
-      }
-      render();
-      break;
-    }
-
-    case 'setGameType':
-      S.rules.gameType = el.dataset.v;
-      render();
-      break;
-
-    case 'setOka':
-      S.rules.okaEnabled = el.dataset.v === '1';
-      render();
-      break;
-
-    case 'startGame':
-      startGame();
-      break;
-
-    case 'resumeGame':
-      S.screen = 'game';
-      save();
-      render();
-      break;
-
-    case 'toSetup':
-      if (S.screen === 'game') {
-        if (!confirm('設定画面に戻りますか？\n（現在の対局は保存されます）')) break;
-      }
-      S.prevScreen = S.screen;
-      S.screen = 'setup';
-      save();
-      render();
-      break;
-
-    case 'toHistory':
-      S.prevScreen = S.screen;
-      S.screen = 'history';
-      render();
-      break;
-
-    case 'backHistory':
-      S.screen = S.prevScreen || 'setup';
-      render();
-      break;
-
-    case 'openEdit':
-      S.modal = {playerIdx: parseInt(el.dataset.i)};
-      render();
-      break;
-
-    case 'closeModal':
-      S.modal = null;
-      render();
-      break;
-
-    case 'qs': {
-      const i = parseInt(el.dataset.i);
-      const d = parseInt(el.dataset.d);
-      applyDelta(i, d);
-      break;
-    }
-
-    case 'qm': {
-      if (!S.modal) break;
-      const v = parseInt(el.dataset.v);
-      applyDelta(S.modal.playerIdx, v);
-      S.modal = null;
-      render();
-      break;
-    }
-
-    case 'applyModal': {
-      if (!S.modal) break;
-      const inp = document.getElementById('modalInp');
-      const v = parseInt(inp?.value, 10);
-      if (!isNaN(v) && v !== 0) applyDelta(S.modal.playerIdx, v);
-      S.modal = null;
-      render();
-      break;
-    }
-
-    case 'undo':
-      undo();
-      break;
-
-    case 'nextRound':
-      advanceRound(1);
-      break;
-
-    case 'adjRound':
-      advanceRound(parseInt(el.dataset.v));
-      break;
-
-    case 'adjHonba': {
-      const v = parseInt(el.dataset.v);
-      S.game.honba = Math.max(0, S.game.honba + v);
-      save();
-      render();
-      break;
-    }
-
-    case 'adjRiichi': {
-      const v = parseInt(el.dataset.v);
-      S.game.riichiSticks = Math.max(0, S.game.riichiSticks + v);
-      save();
-      render();
-      break;
-    }
-
-    case 'endGame':
-      if (confirm('対局を終了して精算しますか？')) endGame();
-      break;
-
-    case 'nextGame':
-      nextGame();
-      break;
-
-    case 'exportCSV':
-      exportCSV();
-      break;
-
-    case 'resetAll':
-      resetAll();
-      break;
-  }
-});
-
-// Live save for text inputs (name, uma, etc.) — no re-render to preserve focus
-document.addEventListener('input', e => {
-  const el = e.target;
-  const field = el.dataset.field;
-  if (!field) return;
-  if (field === 'name') {
-    const i = parseInt(el.dataset.i);
-    if (S.players[i]) S.players[i].name = el.value;
-  } else if (field === 'startPoints' || field === 'returnPoints' || field === 'oka') {
-    const v = parseInt(el.value, 10);
-    if (!isNaN(v)) S.rules[field] = v;
-  } else if (field === 'uma4raw') {
-    S.rules.uma4raw = el.value;
-    S.rules.uma4 = parseUma(el.value);
-  } else if (field === 'uma3raw') {
-    S.rules.uma3raw = el.value;
-    S.rules.uma3 = parseUma(el.value);
-  }
-});
-
-/* ──────────────────────────────────────────────────────
-   Boot
-────────────────────────────────────────────────────── */
-render();
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
   });
+  const csv='﻿'+rows.map(r=>r.join(',')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`mahjong_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
+
+/* =====================================================================
+   MAIN RENDER
+===================================================================== */
+function render(){
+  stopTimer();
+  const app=document.getElementById('app');
+  switch(S.screen){
+    case'home':    app.innerHTML=renderHome();   break;
+    case'setup':   app.innerHTML=renderSetup();  break;
+    case'game':    app.innerHTML=renderGame();   break;
+    case'result':  app.innerHTML=renderResult(); break;
+    case'history': app.innerHTML=renderHistory();break;
+    default:       app.innerHTML=renderHome();
+  }
+  // Re-sync input values on setup screen
+  document.querySelectorAll('[data-field]').forEach(el=>{
+    const k=el.dataset.field;
+    if(k==='uma4raw')el.value=S.rules.uma4raw;
+    else if(k==='uma3raw')el.value=S.rules.uma3raw;
+  });
+  if(S.screen==='game'&&S.game.timerRunning)startTimer();
+}
+
+/* =====================================================================
+   EVENTS
+===================================================================== */
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');
+  if(!el)return;
+  const act=el.dataset.act;
+
+  switch(act){
+    case'setPC':S.playerCount=parseInt(el.dataset.v);S.selectedIds=S.selectedIds.slice(0,S.playerCount);render();break;
+    case'setGameType':S.rules.gameType=el.dataset.v;render();break;
+    case'setOka':S.rules.okaEnabled=el.dataset.v==='1';render();break;
+
+    case'togglePlayer':{
+      const id=el.dataset.id;
+      const idx=S.selectedIds.indexOf(id);
+      if(idx>=0){S.selectedIds.splice(idx,1);}
+      else if(S.selectedIds.length<S.playerCount){S.selectedIds.push(id);}
+      render();break;
+    }
+    case'removeSeat':S.selectedIds.splice(parseInt(el.dataset.i),1);render();break;
+    case'addPlayer':{
+      const inp=document.getElementById('newPlayerName');
+      const name=(inp?.value||'').trim();
+      if(name){addPlayer(name);if(inp)inp.value='';}
+      render();break;
+    }
+    case'deletePlayer':{
+      const id=el.dataset.id;
+      if(confirm(`「${REG[id]?.name}」を削除しますか？`)){deletePlayer(id);S.selectedIds=S.selectedIds.filter(x=>x!==id);}
+      render();break;
+    }
+
+    case'toHome':S.prevScreen=S.screen;S.screen='home';saveSession();render();break;
+    case'toSetup':S.prevScreen=S.screen;S.screen='setup';saveSession();render();break;
+    case'toHistory':S.prevScreen=S.screen;S.screen='history';render();break;
+    case'backHistory':S.screen=S.prevScreen||'home';render();break;
+    case'resumeGame':S.screen='game';saveSession();render();break;
+
+    case'startGame':startGame();break;
+    case'endGame':if(confirm('精算して対局を終了しますか？'))endGame();break;
+    case'nextGame':nextGame();break;
+    case'resetAll':
+      if(confirm('全データをリセットしますか？')){
+        REG={};saveReg();S=defaultSession();saveSession();render();
+      }break;
+    case'exportCSV':exportCSV();break;
+
+    case'undo':undo();break;
+    case'manualAdvance':{
+      if(confirm('次の局に進みますか？\n（点数は変わりません）')){
+        pushUndo();
+        S.game.honba=0;S.game.riichiFlags=new Array(S.playerCount).fill(false);
+        advanceRound();saveSession();render();
+      }break;
+    }
+
+    case'riichi':declareRiichi(parseInt(el.dataset.i));break;
+    case'tapPlayer':break; // future: player detail
+
+    case'openHandInput':
+      S.handInput={step:1,type:null,winnerIdx:null,discarderIdx:null,han:1,fu:30,manganLevel:null,tenpaiFlags:new Array(S.playerCount).fill(false),isOpenHand:false};
+      render();break;
+    case'showScoreTable':S.showScoreTable=true;render();break;
+    case'closeScoreTable':S.showScoreTable=false;render();break;
+    case'closeBust':S.bustPlayerIdx=-1;render();break;
+
+    // Hand input wizard
+    case'hiSetType':S.handInput.type=el.dataset.v;S.handInput.winnerIdx=null;S.handInput.discarderIdx=null;render();break;
+    case'hiSelectPlayer':S.handInput.winnerIdx=parseInt(el.dataset.i);render();break;
+    case'hiSelectDiscarder':S.handInput.discarderIdx=parseInt(el.dataset.i);render();break;
+    case'hiToggleTenpai':{
+      const i=parseInt(el.dataset.i);
+      S.handInput.tenpaiFlags[i]=!S.handInput.tenpaiFlags[i];
+      render();break;
+    }
+    case'hiHan':S.handInput.han=Math.max(1,Math.min(13,S.handInput.han+parseInt(el.dataset.v)));S.handInput.manganLevel=null;render();break;
+    case'hiFu':S.handInput.fu=parseInt(el.dataset.v);S.handInput.manganLevel=null;render();break;
+    case'hiMangan':{
+      const v=el.dataset.v;
+      S.handInput.manganLevel=S.handInput.manganLevel===v?null:v;
+      render();break;
+    }
+    case'hiNext':{
+      const hi=S.handInput;
+      // Sync open hand checkbox
+      const cb=document.getElementById('hi-open');
+      if(cb)hi.isOpenHand=cb.checked;
+
+      const next=determineNextStep(hi);
+      if(next==='confirm')hi.step=99;
+      else hi.step=next;
+      render();break;
+    }
+    case'hiBack':{
+      if(S.handInput.step<=1){S.handInput=null;}
+      else{S.handInput.step=Math.max(1,S.handInput.step-1);}
+      render();break;
+    }
+    case'hiConfirm':{
+      const hi=S.handInput;
+      const cb=document.getElementById('hi-open');
+      if(cb)hi.isOpenHand=cb.checked;
+      applyHandResult({...hi,playerCount:S.playerCount,dealerIdx:S.game.dealerIdx,honba:S.game.honba,riichiSticks:S.game.riichiSticks});
+      break;
+    }
+  }
+});
+
+function determineNextStep(hi){
+  const s=hi.step;
+  if(s===1){
+    if(hi.type==='ryukyoku')return 2;
+    if(hi.type==='chonbo')return 2;
+    return 2;
+  }
+  if(s===2){
+    if(hi.type==='ron'&&hi.winnerIdx!=null)return 3;
+    if(hi.type==='tsumo'&&hi.winnerIdx!=null)return 3;
+    if(hi.type==='ryukyoku')return 'confirm';
+    if(hi.type==='chonbo'&&hi.winnerIdx!=null)return 'confirm';
+    return 2;
+  }
+  if(s===3){
+    if(hi.type==='ron')return 4;
+    return 'confirm';
+  }
+  if(s===4)return 'confirm';
+  return 'confirm';
+}
+
+// Live input handlers
+document.addEventListener('input',e=>{
+  const el=e.target;const k=el.dataset.field;
+  if(!k)return;
+  if(k==='startPoints'||k==='returnPoints'||k==='oka'){const v=parseInt(el.value,10);if(!isNaN(v))S.rules[k]=v;}
+  else if(k==='uma4raw'){S.rules.uma4raw=el.value;S.rules.uma4=parseUma(el.value)||S.rules.uma4;}
+  else if(k==='uma3raw'){S.rules.uma3raw=el.value;S.rules.uma3=parseUma(el.value)||S.rules.uma3;}
+});
+
+/* =====================================================================
+   INIT
+===================================================================== */
+loadReg();
+loadSession();
+render();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 </script>
 </body>
 </html>
